@@ -1,8 +1,8 @@
-# Trail//Track
+# Trail // Track
 
 ## Overview
 
-**_Trail//Track_** is a solution to journal and showcase your outdoor adventures! Trail//Track enables users to document their outdoor activities like hiking, trail running, mountain biking, and more. Users are able to enter activities including details like activity type, location, completion time, pictures, and more. Show off to friends! Trail//Track will utilize the user's data to display reporting of completed activities, showcasing the collected data in graphical charts and interactive maps in a user profile that can be shared with friends.
+**_Trail // Track_** is a solution to journal and showcase your outdoor adventures! Trail // Track enables users to document their outdoor activities like hiking, trail running, mountain biking, and more. Users are able to enter activities including details like activity type, location, completion time, pictures, and more. Show off to friends! Trail // Track will utilize the user's data to display reporting of completed activities, showcasing the collected data in graphical charts and interactive maps in a user profile that can be shared with friends.
 ###
 
 ## Entity Relationship Diagram (ERD)
