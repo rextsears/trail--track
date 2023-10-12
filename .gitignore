@@ -1,0 +1,33 @@
+# Node.js
+node_modules/
+
+# Client build output
+/trail-track/build/
+
+# OS and IDE files
+.DS_Store
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Logs and debugging files
+npm-debug.log*
+
+# Environment variables file
+.env
+
+# Ignore user-specific files
+.idea/
+.DS_Store
+.vscode/
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Ignore other build or temporary files
+build/
+dist/
+bower_components/

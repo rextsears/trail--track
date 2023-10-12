@@ -6,7 +6,7 @@
 ###
 
 ## Entity Relationship Diagram (ERD)
-![erd](./images/erd.png)
+![erd](./README_images/erd.png)
 ###
 
 ## User Stories
@@ -35,11 +35,11 @@
 ## Wireframes
 
 ### Login Page
-![wf_login](./images/wf_login.png)
+![wf_login](./README_images/wf_login.png)
 #
 ### Main Landing Page
-![wf_main](./images/wf_main.png)
+![wf_main](./README_images/wf_main.png)
 #
 ### Enter New Activity
-![wf_enternew](./images/wf_enternew.png)
+![wf_enternew](./README_images/wf_enternew.png)
 #

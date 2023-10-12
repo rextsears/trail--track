@@ -9,6 +9,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "homepage": "/trailtrack",
   "dependencies": {
     "express": "^4.18.2",
     "mongoose": "^7.6.1"
