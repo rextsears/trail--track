@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Activity = require('../models/activity'); // Import the Activity model
+const Activity = require('../models/activities'); // Import the Activity model
 const UserStats = require('../models/userStats'); // Import the UserStats model
 
 // Handle adding a new activity

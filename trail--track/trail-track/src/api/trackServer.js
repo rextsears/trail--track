@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:5001/'; // Update to your server's base URL
+const BASE_URL = 'http://localhost:5001'; // Update to your server's base URL
 
 export const addActivity = (activityData) => {
   return axios.post(`${BASE_URL}/trackServer`, activityData); // Update routes accordingly
@@ -16,6 +16,10 @@ export const deleteActivity = (activityId) => {
 
 export const login = (userData) => {
   return axios.post(`${BASE_URL}/login`, userData);
+};
+
+export const register = (userData) => {
+  return axios.post(`${BASE_URL}/register`, userData);
 };
 
 export const getUserStats = () => {

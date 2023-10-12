@@ -22,10 +22,10 @@ mongoose.connect(process.env.DATABASE_URL, {
 app.use(cors());
 
 // Serve static files from the "build" directory
-app.use(express.static(path.join(__dirname, '../trail--track/trail-track/build')));
+app.use(express.static(path.join(__dirname, 'trail--track/trail-track/build')));
 
 // Import Mongoose model for activities (if it's in a file named activities.js)
-const Activity = require('./models/activities'); // Update the model name to 'activities'
+const Activity = require('./models/activities'); // Update the model name to 'Activity'
 
 // Parse JSON requests
 app.use(express.json());
@@ -91,7 +91,7 @@ app.use('/api/user', userRoutes);
 
 // Handle any other routes by serving the React app
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../trail--track/trail-track/build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'trail--track/trail-track/build', 'index.html'));
 });
 
 app.listen(PORT, () => {
