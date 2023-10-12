@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+# Trail // Track
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+**_Trail // Track_** is a solution to journal and showcase your outdoor adventures! Trail // Track enables users to document their outdoor activities like hiking, trail running, mountain biking, and more. Users are able to enter activities including details like activity type, location, completion time, pictures, and more. Show off to friends! Trail // Track will utilize the user's data to display reporting of completed activities, showcasing the collected data in graphical charts and interactive maps in a user profile that can be shared with friends.
+###
 
-In the project directory, you can run:
+## Entity Relationship Diagram (ERD)
+![erd](./README_images/erd.png)
+###
 
-### `npm start`
+## User Stories
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Current (In-Progress)
+    - As a user, I want the ability to load the application in a web browser.
+    - As a user, I want the ability to store activity data in a database for the information to be recalled in the future for later use.
+    - As a user, I want the ability to edit or otherwise modify activity data that was previously entered.
+    - As a user, I want the ability to delete activity data that was previously entered.
+    - As a user, I want to be able to store details related to each activity including, at minimun, Activity Type, Distance, Completion Time, and Location.
+    - As a user, I want the ability to mark certain noteoworthy activities as 'Accomplishments.'
+    - As a user, I want the ability to be the only person with the ability to add, edit, or delete personal activity data.
+    - As a user, I want to be able to see my activity data displayed in a visual/graphical manner.
+    - As a user, I want to be able to showcase my activity data in a personal user profile that can be viewed by others.
+    - As a user, I want the ability to 'log in' to the app to only see and make changes to my information.
+    - As a user, I want the ability to interact with the application and database in a manner that is user friendly and familiar to the look and feel of other apps I use regularly.
+    - As a user, I want the application to take the location data for each activity I enter and have the location displayed in an interactive map.
+    - As a user, I want the ability to allow other users interact with my user profile and leave comments.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Ice Box (Future Enhancements)
+    - As a user, I want the application to have an adventure-themed design.
 
-### `npm test`
+### Completed (MVP)
+    - N/A
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Wireframes
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Login Page
+![wf_login](./README_images/wf_login.png)
+#
+### Main Landing Page
+![wf_main](./README_images/wf_main.png)
+#
+### Enter New Activity
+![wf_enternew](./README_images/wf_enternew.png)
+#

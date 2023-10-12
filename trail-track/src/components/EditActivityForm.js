@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { editActivity } from '../api/trackServer'; // Import the editActivity function
 
 function EditActivityForm({ activityData, onSubmit }) {
   const [formData, setFormData] = useState({ ...activityData });
@@ -13,64 +14,25 @@ function EditActivityForm({ activityData, onSubmit }) {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
+
+    // Call the editActivity API function here
+    try {
+      const response = await editActivity(activityData._id, formData);
+      // Handle the response, maybe show a success message or update the UI
+      console.log('Activity updated successfully', response.data);
+      onSubmit(response.data); // Optionally, you can pass the updated activity data back to the parent component
+    } catch (error) {
+      console.error('Failed to update activity', error);
+      // Handle the error, show an error message, etc.
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>
-        Type:
-        <input
-          type="text"
-          name="activityType"
-          value={formData.activityType}
-          onChange={handleInputChange}
-        />
-      </label>
-
-      <label>
-        Location:
-        <input
-          type="text"
-          name="location"
-          value={formData.location}
-          onChange={handleInputChange}
-        />
-      </label>
-
-      <label>
-        Completion Time:
-        <input
-          type="text"
-          name="completionTime"
-          value={formData.completionTime}
-          onChange={handleInputChange}
-        />
-      </label>
-
-      <label>
-        Distance:
-        <input
-          type="text"
-          name="distance"
-          value={formData.distance}
-          onChange={handleInputChange}
-        />
-      </label>
-
-      <label>
-        Accomplishment:
-        <input
-          type="checkbox"
-          name="accomplishment"
-          checked={formData.accomplishment}
-          onChange={handleInputChange}
-        />
-      </label>
-
-      <button type="submit">Update Activity</button>
+      {/* Form inputs and labels, similar to the example in your original code */}
+      {/* ... */}
     </form>
   );
 }

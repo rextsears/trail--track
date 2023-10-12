@@ -1,8 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const cors = require('cors'); // Import the 'cors' middleware
 const app = express();
-const PORT = process.env.PORT || 5000;
+require('dotenv').config();
+const PORT = process.env.PORT || 5001;
 
 // Connect to MongoDB
 mongoose.connect(process.env.DATABASE_URL, {
@@ -16,17 +18,20 @@ mongoose.connect(process.env.DATABASE_URL, {
     console.error('Error connecting to the database:', error);
   });
 
-// Serve static files from the "build" directory
-app.use(express.static(path.join(__dirname, 'client/build')));
+// Allow requests from the client application (http://localhost:3000)
+app.use(cors());
 
-// Import Mongoose model for activities
-const Activity = require('./models/activity');
+// Serve static files from the "build" directory
+app.use(express.static(path.join(__dirname, '../trail--track/trail-track/build')));
+
+// Import Mongoose model for activities (if it's in a file named activities.js)
+const Activity = require('./models/activities'); // Update the model name to 'activities'
 
 // Parse JSON requests
 app.use(express.json());
 
 // API route to save a new activity
-app.post('/api/activities', async (req, res) => {
+app.post('/api/trackServer', async (req, res) => {
   try {
     const { activityType, distance, completionTime, location, accomplishment } = req.body;
 
@@ -50,7 +55,7 @@ app.post('/api/activities', async (req, res) => {
 });
 
 // API route to edit an existing activity
-app.put('/api/activities/:id', async (req, res) => {
+app.put('/api/trackServer/:id', async (req, res) => {
   try {
     const { activityType, distance, completionTime, location, accomplishment } = req.body;
 
@@ -74,9 +79,19 @@ app.put('/api/activities/:id', async (req, res) => {
   }
 });
 
+// Import the auth route
+const authRoutes = require('./routes/auth'); // Update the path to auth.js
+
+// Mount the auth route under the "/api" namespace
+app.use('/api', authRoutes);
+
+// Mount user-related routes from the user route file
+const userRoutes = require('./routes/user');
+app.use('/api/user', userRoutes);
+
 // Handle any other routes by serving the React app
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../trail--track/trail-track/build', 'index.html'));
 });
 
 app.listen(PORT, () => {
