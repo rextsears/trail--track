@@ -92,6 +92,18 @@ app.put('/api/trackServer/:id', async (req, res) => {
   }
 });
 
+// New route to retrieve all activities
+app.get('/api/activities', async (req, res) => {
+  try {
+    // Retrieve all activities from the database
+    const activities = await Activity.find();
+    res.json(activities);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to retrieve activities' });
+  }
+});
+
 // Handle any other routes by serving the React app
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'trail--track/trail-track/build', 'index.html'));
