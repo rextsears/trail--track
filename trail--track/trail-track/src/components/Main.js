@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getUserStats } from '../api/trackServer'; // Import the API function
 
 function MainScreen() {
@@ -47,13 +48,13 @@ function MainScreen() {
         </div>
       </div>
       <div className="navigation">
-        <ul>
-          <li><a href="/add-activity">+ Add Activity</a></li>
-          <li><a href="/all-activities">All Activities</a></li>
-          <li><a href="/accomplishments">Accomplishments</a></li>
-          <li><a href="/activity-map">Activity Map</a></li>
-        </ul>
-      </div>
+      <ul>
+        <li><a href="/add-activity">+ Add Activity</a></li>
+        <li><Link to="/all-activities">All Activities</Link></li>
+        <li><Link to="/accomplishments">Accomplishments</Link></li>
+        <li><Link to="/activity-map">Activity Map</Link></li>
+      </ul>
+    </div>
     </div>
   );
 }

@@ -27,11 +27,21 @@ export const getUserStats = () => {
 };
 
 // Replace 'your-api-endpoint' with the actual endpoint to fetch activities
-const API_ENDPOINT = 'http://localhost:5001/all-activities';
+const API_ENDPOINT = `${BASE_URL}/all-activities`;
 
 export async function getActivities() {
   try {
     const response = await axios.get(API_ENDPOINT);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Fetch user accomplishments
+export async function getAccomplishments() {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/accomplishments`); // Replace with your actual endpoint
     return response;
   } catch (error) {
     throw error;
