@@ -35,8 +35,57 @@ function AddActivityForm({ onSubmit }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* Form inputs and labels, similar to the example in a previous response */}
-      {/* ... */}
+      <div>
+        <label htmlFor="activityType">Activity Type:</label>
+        <input
+          type="text"
+          id="activityType"
+          name="activityType"
+          value={formData.activityType}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div>
+        <label htmlFor="location">Location:</label>
+        <input
+          type="text"
+          id="location"
+          name="location"
+          value={formData.location}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div>
+        <label htmlFor="completionTime">Completion Time:</label>
+        <input
+          type="text"
+          id="completionTime"
+          name="completionTime"
+          value={formData.completionTime}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div>
+        <label htmlFor="distance">Distance:</label>
+        <input
+          type="text"
+          id="distance"
+          name="distance"
+          value={formData.distance}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div>
+        <label htmlFor="accomplishment">Accomplishment:</label>
+        <input
+          type="checkbox"
+          id="accomplishment"
+          name="accomplishment"
+          checked={formData.accomplishment}
+          onChange={handleInputChange}
+        />
+      </div>
+      <button type="submit">Add Activity</button>
     </form>
   );
 }

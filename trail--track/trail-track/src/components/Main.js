@@ -9,6 +9,8 @@ function MainScreen() {
     totalTime: 0,
   });
 
+  const [activeUserName, setActiveUserName] = useState('Tom'); // Replace 'Tom' with the actual active user's name
+
   useEffect(() => {
     // Replace the simulated data retrieval with actual API requests
     const fetchUserStats = async () => {
@@ -30,6 +32,7 @@ function MainScreen() {
 
   return (
     <div className="main-screen">
+      <h2>Welcome, {activeUserName}!</h2> {/* Display the greeting */}
       <div className="my-stats">
         <h2>My Stats</h2>
         <div className="stats-container">
@@ -48,13 +51,13 @@ function MainScreen() {
         </div>
       </div>
       <div className="navigation">
-      <ul>
-        <li><a href="/add-activity">+ Add Activity</a></li>
-        <li><Link to="/all-activities">All Activities</Link></li>
-        <li><Link to="/accomplishments">Accomplishments</Link></li>
-        <li><Link to="/activity-map">Activity Map</Link></li>
-      </ul>
-    </div>
+        <ul>
+          <li><a href="/add-activity">+ Add Activity</a></li>
+          <li><Link to="/all-activities">All Activities</Link></li>
+          <li><Link to="/accomplishments">Accomplishments</Link></li>
+          <li><Link to="/activity-map">Activity Map</Link></li>
+        </ul>
+      </div>
     </div>
   );
 }
