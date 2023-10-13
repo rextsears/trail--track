@@ -7,42 +7,33 @@ require('dotenv').config(); // Load environment variables from .env file
 
 // Route to handle user login
 router.post('/api/login', async (req, res) => {
-  // Existing login code here
-});
-
-// Route to handle user registration
-router.post('/api/register', async (req, res) => {
   try {
-    const { username, password, name, email } = req.body;
+    const { username, password } = req.body;
 
-    // Check if the username is already taken
-    const existingUser = await User.findOne({ username });
+    // Check if the username exists in the database
+    const user = await User.findOne({ username });
 
-    if (existingUser) {
-      return res.status(400).json({ error: 'Username already taken' });
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid username or password' });
     }
 
-    // Hash the password before saving it to the database
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    // Compare the provided password with the hashed password in the database
+    const passwordMatch = await bcrypt.compare(password, user.password);
 
-    const newUser = new User({
-      username,
-      password: hashedPassword,
-      name,
-      email,
-    });
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid username or password' });
+    }
 
-    await newUser.save();
+    // User authentication successful; generate a token
+    const secretKey = process.env.SECRET_KEY; // Retrieve the secret key from environment variables
+    const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
 
-    const secretKey = process.env.SECRET_KEY; // Retrieve the secret key from the environment variables
-    const token = jwt.sign({ userId: newUser._id }, secretKey, { expiresIn: '1h' });
-
-    res.status(201).json({ token });
+    res.status(200).json({ token });
   } catch (error) {
-    console.error('Registration failed:', error);
-    res.status(500).json({ error: 'Registration failed' });
+    console.error('Login failed:', error);
+    res.status(500).json({ error: 'Login failed' });
   }
 });
 
 module.exports = router;
+

@@ -15,13 +15,25 @@ export const deleteActivity = (activityId) => {
 };
 
 export const login = (userData) => {
-  return axios.post(`${BASE_URL}/login`, userData);
+  return axios.post(`${BASE_URL}/api/login`, userData);
 };
 
 export const register = (userData) => {
-  return axios.post(`${BASE_URL}/register`, userData);
+  return axios.post(`${BASE_URL}/api/join/register`, userData); // Correct URL for registration
 };
 
 export const getUserStats = () => {
   return axios.get(`${BASE_URL}/user/stats`);
 };
+
+// Replace 'your-api-endpoint' with the actual endpoint to fetch activities
+const API_ENDPOINT = 'http://localhost:5001/all-activities';
+
+export async function getActivities() {
+  try {
+    const response = await axios.get(API_ENDPOINT);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}

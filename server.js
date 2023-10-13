@@ -6,20 +6,18 @@ const app = express();
 require('dotenv').config();
 const PORT = process.env.PORT || 5001;
 
+
 // Connect to MongoDB
-mongoose.connect(process.env.DATABASE_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => {
-    console.log('Connected to the database');
-  })
-  .catch((error) => {
-    console.error('Error connecting to the database:', error);
-  });
+// Import the database connection
+const db = require('./config/database');
 
 // Allow requests from the client application (http://localhost:3000)
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200, // Some legacy browsers (IE11) choke on 204
+};
+
+app.use(cors(corsOptions));
 
 // Serve static files from the "build" directory
 app.use(express.static(path.join(__dirname, 'trail--track/trail-track/build')));
@@ -29,6 +27,22 @@ const Activity = require('./models/activities'); // Update the model name to 'Ac
 
 // Parse JSON requests
 app.use(express.json());
+
+// Import the auth route
+const authRoutes = require('./routes/auth'); // Update the path to auth.js
+
+// Mount the auth route under the "/api" namespace
+app.use('/api', authRoutes);
+
+// Import the join route
+const joinRoutes = require('./routes/join');
+
+// Mount the join route under the desired namespace, e.g., "/api/join"
+app.use('/api/join', joinRoutes);
+
+// Mount user-related routes from the user route file
+const userRoutes = require('./routes/user');
+app.use('/api/user', userRoutes);
 
 // API route to save a new activity
 app.post('/api/trackServer', async (req, res) => {
@@ -78,16 +92,6 @@ app.put('/api/trackServer/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to update the activity' });
   }
 });
-
-// Import the auth route
-const authRoutes = require('./routes/auth'); // Update the path to auth.js
-
-// Mount the auth route under the "/api" namespace
-app.use('/api', authRoutes);
-
-// Mount user-related routes from the user route file
-const userRoutes = require('./routes/user');
-app.use('/api/user', userRoutes);
 
 // Handle any other routes by serving the React app
 app.get('/*', (req, res) => {

@@ -81,4 +81,17 @@ const updateStats = async (userId) => {
   }
 };
 
+// Define a route to retrieve all activities
+router.get('/api/activities', async (req, res) => {
+  try {
+    // Retrieve all activities from the database
+    const activities = await Activity.find();
+
+    res.json(activities);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to retrieve activities' });
+  }
+});
+
 module.exports = router;
