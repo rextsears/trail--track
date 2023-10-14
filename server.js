@@ -1,9 +1,15 @@
 const express = require('express');
+const session = require('express-session'); // Import express-session
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
 const app = express();
 require('dotenv').config();
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const User = require('./models/user'); // Import the User model
+const { ensureAuthenticated } = require('./config/authMiddleware'); // Adjust the path as needed
+const crypto = require('crypto');
 
 // Import the database connection
 const db = require('./config/database');
@@ -24,6 +30,83 @@ const Activity = require('./models/activities'); // Update the model name to 'Ac
 // Middleware: Parse JSON requests
 app.use(express.json());
 
+// Passport configuration
+passport.use(new LocalStrategy(
+  {
+    usernameField: 'username', // Customize these to match your user model
+    passwordField: 'password', // Customize these to match your user model
+  },
+  async (username, password, done) => {
+    try {
+      const user = await User.findOne({ username });
+
+      if (!user) {
+        return done(null, false, { message: 'Invalid username' });
+      }
+
+      // You should compare the hashed password here (using a library like bcrypt)
+      if (password !== user.password) {
+        return done(null, false, { message: 'Invalid password' });
+      }
+
+      return done(null, user);
+    } catch (error) {
+      return done(error);
+    }
+  }
+));
+
+passport.serializeUser((user, done) => {
+  done(null, user.id); // Customize this based on your user model
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error);
+  }
+});
+
+// Initialize Passport
+const secret = crypto.randomBytes(32).toString('hex');
+
+app.use(
+  session({
+    secret: secret, // Replace with a strong, random secret
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Middleware to verify JWT token
+const verifyToken = (req, res, next) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  // Verify the token
+  jwt.verify(token, 'your-secret-key', (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ error: 'Token is invalid' });
+    }
+
+    // Attach the user ID to the request
+    req.userId = decoded.userId;
+    next();
+  });
+};
+
+// Use the middleware in your protected route
+app.get('/api/activities', verifyToken, async (req, res) => {
+  // Now, req.userId contains the user's ID
+  // Fetch activities for the authenticated user using req.userId
+});
+
 // Import the join route
 const joinRoutes = require('./routes/join');
 // Mount the join route under the desired namespace, e.g., "/api/join"
@@ -38,11 +121,12 @@ const authRoutes = require('./routes/auth'); // Update the path to auth.js
 // Mount the auth route under the "/api/login" namespace
 app.post('/api/login', authRoutes);
 
-// New route to retrieve all activities
-app.get('/api/activities', async (req, res) => {
+// New route to retrieve activities for the active user
+app.get('/api/activities', ensureAuthenticated, async (req, res) => {
   try {
-    // Retrieve all activities from the database
-    const activities = await Activity.find();
+    // Retrieve activities only for the currently authenticated user
+    const activities = await Activity.find({ userId: req.user.id }); // Assuming there is a 'userId' field in the activities model
+
     res.json(activities);
   } catch (error) {
     console.error(error);
@@ -50,31 +134,8 @@ app.get('/api/activities', async (req, res) => {
   }
 });
 
-// Create an express router for accomplishments
-const accomplishmentsRouter = express.Router();
-
-// API route to fetch accomplishments
-accomplishmentsRouter.get('/api/accomplishments', async (req, res) => {
-  try {
-    // Fetch all activities
-    const activities = await Activity.find({ accomplishment: true });
-
-    // Filter activities that have accomplishment: true
-    const accomplishments = activities.filter((activity) => activity.accomplishment === true);
-
-    // Send JSON response
-    res.json(accomplishments);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to fetch accomplishments' });
-  }
-});
-
-// Mount the accomplishments router under the desired namespace, e.g., "/api/accomplishments"
-app.use('/api/accomplishments', accomplishmentsRouter);
-
 // API route to save a new activity
-app.post('/api/trackServer', async (req, res) => {
+app.post('/api/trackServer', ensureAuthenticated, async (req, res) => {
   try {
     const { activityType, distance, completionTime, location, accomplishment } = req.body;
 
@@ -85,6 +146,7 @@ app.post('/api/trackServer', async (req, res) => {
       completionTime,
       location,
       accomplishment,
+      userId: req.user.id, // Assign the userId to associate the activity with the currently authenticated user
     });
 
     // Save the activity to the database
@@ -98,7 +160,7 @@ app.post('/api/trackServer', async (req, res) => {
 });
 
 // API route to edit an existing activity
-app.put('/api/trackServer/:id', async (req, res) => {
+app.put('/api/trackServer/:id', ensureAuthenticated, async (req, res) => {
   try {
     const { activityType, distance, completionTime, location, accomplishment } = req.body;
 

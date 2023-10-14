@@ -2,19 +2,30 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:5001'; // Update to your server's base URL
 
+const token = localStorage.getItem('authToken');
+
 // Function to add a new activity
-export const addActivity = (activityData) => {
-  return axios.post(`${BASE_URL}/api/trackServer`, activityData);
+export const addActivity = (activityData, token) => {
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+  };
+  return axios.post(`${BASE_URL}/api/trackServer`, activityData, { headers });
 };
 
 // Function to edit an existing activity
-export const editActivity = (activityId, activityData) => {
-  return axios.put(`${BASE_URL}/api/trackServer/${activityId}`, activityData);
+export const editActivity = (activityId, activityData, token) => {
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+  };
+  return axios.put(`${BASE_URL}/api/trackServer/${activityId}`, activityData, { headers });
 };
 
 // Function to delete an activity
-export const deleteActivity = (activityId) => {
-  return axios.delete(`${BASE_URL}/api/trackServer/${activityId}`);
+export const deleteActivity = (activityId, token) => {
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+  };
+  return axios.delete(`${BASE_URL}/api/trackServer/${activityId}`, { headers });
 };
 
 // Function for user login
@@ -28,30 +39,25 @@ export const register = (userData) => {
 };
 
 // Function to get user statistics
-export const getUserStats = () => {
-  return axios.get(`${BASE_URL}/api/user/stats`);
+export const getUserStats = (token) => {
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+  };
+  return axios.get(`${BASE_URL}/api/user/stats`, { headers });
 };
 
 // Replace 'your-api-endpoint' with the actual endpoint to fetch activities
 const API_ENDPOINT = 'http://localhost:5001/api/activities';
 
 // Function to get a list of activities
-export async function getActivities() {
+export async function getActivities(token) {
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+  };
   try {
-    const response = await axios.get(API_ENDPOINT);
+    const response = await axios.get(API_ENDPOINT); // Updated URL to fetch activities
     return response;
   } catch (error) {
     throw error;
   }
 };
-
-// Function to fetch user accomplishments
-export async function getAccomplishments() {
-  try {
-    const response = await axios.get('http://localhost:5001/api/accomplishments');
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
-

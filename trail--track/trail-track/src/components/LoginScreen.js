@@ -4,7 +4,6 @@ import { useNavigate, Link } from 'react-router-dom';
 
 function LoginScreen() {
   const [loginFormData, setLoginFormData] = useState({ username: '', password: '' });
-  // eslint-disable-next-line
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -15,16 +14,16 @@ function LoginScreen() {
   const handleLogin = async (e) => {
     e.preventDefault();
   
-    const { username, password } = loginFormData; // Extract username and password
-  
-    console.log('Data sent to the server:', { username, password }); // Log the data being sent as an object
-  
+    const { username, password } = loginFormData;
+
     try {
-      const response = await login({ username, password }); // Send data as an object
+      const response = await login({ username, password });
   
       if (response.status === 200) {
+        const token = response.data.token; // Extract the token from the response
+        localStorage.setItem('authToken', token); // Store the token in localStorage
+
         console.log('Login successful');
-        // Redirect to the main page or any other route
         navigate('/main'); 
       } else {
         console.error('Login failed');

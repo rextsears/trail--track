@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Activity = require('../models/activities'); // Import the Activity model
 const UserStats = require('../models/userStats'); // Import the UserStats model
+const { ensureAuthenticated } = require('../config/authMiddleware'); // Import the authentication middleware
 
 // Handle adding a new activity
-router.post('/api/activities', async (req, res) => {
+router.post('/api/activities', ensureAuthenticated, async (req, res) => {
   try {
     // Implementation for adding a new activity
     // This code will depend on your specific use case
@@ -25,7 +26,7 @@ router.post('/api/activities', async (req, res) => {
 });
 
 // Handle editing an existing activity
-router.put('/api/activities/:id', async (req, res) => {
+router.put('/api/activities/:id', ensureAuthenticated, async (req, res) => {
   try {
     // Implementation for editing an existing activity
     // This code will depend on your specific use case
@@ -44,7 +45,7 @@ router.put('/api/activities/:id', async (req, res) => {
 });
 
 // Handle deleting an activity
-router.delete('/api/activities/:id', async (req, res) => {
+router.delete('/api/activities/:id', ensureAuthenticated, async (req, res) => {
   try {
     const activityId = req.params.id;
     const userId = req.user._id; // Assuming you have authenticated the user and their ID is available in req.user
@@ -70,10 +71,10 @@ router.delete('/api/activities/:id', async (req, res) => {
 // Function to update user statistics
 const updateStats = async (userId) => {
   try {
+    // Assuming you have a method in your model to update user stats for a specific user
     const userStats = await UserStats.findOne({ userId });
-
+    
     if (userStats) {
-      // Assuming you have a method in your model to update user stats, for example, 'updateUserStats'
       await userStats.updateUserStats(); 
     }
   } catch (error) {
@@ -81,11 +82,12 @@ const updateStats = async (userId) => {
   }
 };
 
+
 // Define a route to retrieve all activities
-router.get('/api/activities', async (req, res) => {
+router.get('/api/activities', ensureAuthenticated, async (req, res) => {
   try {
-    // Retrieve all activities from the database
-    const activities = await Activity.find();
+    const userId = req.user._id; // Get the user's ID from the authenticated user
+    const activities = await Activity.find({ userId }); // Filter activities by userId
 
     res.json(activities);
   } catch (error) {
@@ -93,5 +95,6 @@ router.get('/api/activities', async (req, res) => {
     res.status(500).json({ error: 'Failed to retrieve activities' });
   }
 });
+
 
 module.exports = router;

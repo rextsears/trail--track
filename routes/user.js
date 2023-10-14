@@ -1,16 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const UserStats = require('../models/userStats');
+const { ensureAuthenticated } = require('../config/authMiddleware'); // Import the authentication middleware
 
 // Route to fetch user statistics
-router.get('/api/user/stats', async (req, res) => {
+router.get('/api/user/stats', ensureAuthenticated, async (req, res) => {
   try {
-    // Fetch user statistics based on the user's ID
-    // You should have user authentication in place to get the user's ID
-    const userId = req.user._id; // Assuming you have authenticated the user and their ID is available in req.user
-
-    // Use the userId to fetch user statistics from the database
-    const userStats = await UserStats.findOne({ userId });
+    const userId = req.user._id; // Get the user's ID from the authenticated user
+    const userStats = await UserStats.findOne({ userId }); // Filter statistics by userId
 
     if (!userStats) {
       // If no user statistics are found, you can return an appropriate response
@@ -24,7 +21,5 @@ router.get('/api/user/stats', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch user statistics' });
   }
 });
-
-// You can add more user-related routes here as needed
 
 module.exports = router;
