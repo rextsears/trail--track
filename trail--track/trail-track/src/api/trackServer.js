@@ -2,8 +2,6 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:5001'; // Update to your server's base URL
 
-const token = localStorage.getItem('authToken');
-
 // Function to add a new activity
 export const addActivity = (activityData, token) => {
   const headers = {
@@ -51,6 +49,7 @@ const API_ENDPOINT = 'http://localhost:5001/api/activities';
 
 // Function to get a list of activities
 export async function getActivities(token) {
+  // eslint-disable-next-line
   const headers = {
     'Authorization': `Bearer ${token}`,
   };
