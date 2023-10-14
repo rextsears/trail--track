@@ -6,8 +6,14 @@ function ActivityList() {
 
   useEffect(() => {
     // Fetch activities when the component mounts
+    const token = localStorage.getItem('authToken'); // Retrieve the token from local storage
+    //console.log('Token:', token);
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    
     axios
-      .get('http://localhost:5001/api/activities')
+      .get('http://localhost:5001/api/activities', { headers }) // Include the headers
       .then((response) => {
         console.log(response.data); // Log the response data
         setActivities(response.data);

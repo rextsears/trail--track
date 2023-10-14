@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import React, { useState } from 'react';
 import AddActivityForm from './AddActivityForm'; // Import the AddActivityForm component
 import { Link } from 'react-router-dom';

@@ -10,6 +10,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const User = require('./models/user'); // Import the User model
 const { ensureAuthenticated } = require('./config/authMiddleware'); // Adjust the path as needed
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken'); // Import the jsonwebtoken module
 
 // Import the database connection
 const db = require('./config/database');
@@ -82,6 +83,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+const secretKey = crypto.randomBytes(32).toString('hex');
+
 // Middleware to verify JWT token
 const verifyToken = (req, res, next) => {
   const token = req.headers.authorization;
@@ -89,8 +92,8 @@ const verifyToken = (req, res, next) => {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  // Verify the token
-  jwt.verify(token, 'your-secret-key', (err, decoded) => {
+  // Verify the token using the secret key you have defined
+  jwt.verify(token, secretKey, (err, decoded) => {
     if (err) {
       return res.status(401).json({ error: 'Token is invalid' });
     }
