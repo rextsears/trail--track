@@ -38,10 +38,40 @@ const authRoutes = require('./routes/auth'); // Update the path to auth.js
 // Mount the auth route under the "/api/login" namespace
 app.post('/api/login', authRoutes);
 
-// Import the accomplishments route
-const accomplishmentsRoutes = require('./routes/accomplishments');
-// Mount the accomplishments route under the desired namespace, e.g., "/api/accomplishments"
-app.use('/api/accomplishments', accomplishmentsRoutes);
+// New route to retrieve all activities
+app.get('/api/activities', async (req, res) => {
+  try {
+    // Retrieve all activities from the database
+    const activities = await Activity.find();
+    res.json(activities);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to retrieve activities' });
+  }
+});
+
+// Create an express router for accomplishments
+const accomplishmentsRouter = express.Router();
+
+// API route to fetch accomplishments
+accomplishmentsRouter.get('/api/accomplishments', async (req, res) => {
+  try {
+    // Fetch all activities
+    const activities = await Activity.find({ accomplishment: true });
+
+    // Filter activities that have accomplishment: true
+    const accomplishments = activities.filter((activity) => activity.accomplishment === true);
+
+    // Send JSON response
+    res.json(accomplishments);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch accomplishments' });
+  }
+});
+
+// Mount the accomplishments router under the desired namespace, e.g., "/api/accomplishments"
+app.use('/api/accomplishments', accomplishmentsRouter);
 
 // API route to save a new activity
 app.post('/api/trackServer', async (req, res) => {
@@ -89,18 +119,6 @@ app.put('/api/trackServer/:id', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to update the activity' });
-  }
-});
-
-// New route to retrieve all activities
-app.get('/api/activities', async (req, res) => {
-  try {
-    // Retrieve all activities from the database
-    const activities = await Activity.find();
-    res.json(activities);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to retrieve activities' });
   }
 });
 

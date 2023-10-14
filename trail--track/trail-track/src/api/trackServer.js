@@ -48,7 +48,7 @@ export async function getActivities() {
 // Function to fetch user accomplishments
 export async function getAccomplishments() {
   try {
-    const response = await axios.get(`${BASE_URL}/api/accomplishments`);
+    const response = await axios.get('http://localhost:5001/api/accomplishments');
     return response;
   } catch (error) {
     throw error;
