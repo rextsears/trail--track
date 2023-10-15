@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getActivities } from '../api/trackServer.js';
-import TrackMap from './TrackMap'; // Import the TrackMap component
-import '../styles/map.css'; // Import the map.css file
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { getActivities, deleteActivity } from '../api/trackServer.js';
+import TrackMap from './TrackMap';
+import '../styles/map.css';
 
 function ActivityDetail() {
     const { id } = useParams();
     const [activity, setActivity] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showConfirmation, setShowConfirmation] = useState(false); // State for showing the confirmation modal
+    const navigate = useNavigate(); // Access to the history object for redirection
 
     useEffect(() => {
         getActivities()
@@ -31,6 +33,22 @@ function ActivityDetail() {
             });
     }, [id]);
 
+    const handleDeleteConfirmation = () => {
+        // Set the state to confirm the deletion
+        setShowConfirmation(false);
+
+        // Call the deleteActivity function with the activity ID
+        deleteActivity(id)
+            .then(() => {
+                // Redirect to the All Activities page after deletion
+                navigate('/all-activities');
+            })
+            .catch((error) => {
+                console.error('Error deleting activity:', error);
+                // Handle the error
+            });
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -41,19 +59,30 @@ function ActivityDetail() {
 
     return (
         <div>
-          <h2>Activity Detail</h2>
-          <ul className="detail-container">
-          <li>Activity Type: {activity.activityType}</li>
-          <li>Location: {activity.location}</li>
-          <li>Completion Time: {activity.completionTime}</li>
-          <li>Distance: {activity.distance}</li>
-          </ul>
-        <div className="map-container">
-            <TrackMap />
+            <h2>Activity Detail</h2>
+            <ul className="detail-container">
+                <li>Activity Type: {activity.activityType}</li>
+                <li>Location: {activity.location}</li>
+                <li>Completion Time: {activity.completionTime}</li>
+                <li>Distance: {activity.distance}</li>
+            </ul>
+            <div className="button-container">
+                <Link to={`/edit/${id}`} className="edit-button">Edit</Link>
+                <button onClick={() => setShowConfirmation(true)} className="delete-button">Delete</button>
+            </div>
+            <div className="map-container">
+                <TrackMap />
+            </div>
+
+            {showConfirmation && ( // Display the confirmation modal when showConfirmation is true
+                <div className="confirmation-modal">
+                    <p>Are you sure you want to delete this activity?</p>
+                    <button onClick={handleDeleteConfirmation}>Yes</button>
+                    <button onClick={() => setShowConfirmation(false)}>No</button>
+                </div>
+            )}
         </div>
-        </div>
-      );    
-    
+    );
 }
 
 export default ActivityDetail;

@@ -61,7 +61,7 @@ router.put('/trackServer/:id', ensureAuthenticated, async (req, res) => {
 });
 
 // Handle deleting an activity
-router.delete('/activities/:id', ensureAuthenticated, async (req, res) => {
+router.delete('/trackServer/:id', ensureAuthenticated, async (req, res) => {
     try {
         const activityId = req.params.id;
         const userId = req.user.id;
@@ -75,7 +75,7 @@ router.delete('/activities/:id', ensureAuthenticated, async (req, res) => {
         await Activity.findByIdAndRemove(activityId);
 
         // Update user statistics after successfully deleting an activity
-        await updateStats(userId);
+        //await updateStats(userId);
 
         res.json({ message: 'Activity deleted successfully' });
     } catch (error) {
