@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 function LoginScreen() {
   const [loginFormData, setLoginFormData] = useState({ username: '', password: '' });
@@ -62,6 +62,11 @@ function LoginScreen() {
         </div>
         <button type="submit">Login</button>
       </form>
+
+      {/* Add a "Join" link to the registration screen */}
+      <p>
+        New user? <Link to="/join">Join</Link>
+      </p>
     </div>
   );
 }

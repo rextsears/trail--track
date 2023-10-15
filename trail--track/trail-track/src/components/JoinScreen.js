@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { register } from '../api/trackServer';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 
 function JoinScreen() {
   const [formData, setFormData] = useState({
@@ -10,6 +10,8 @@ function JoinScreen() {
     verifyPassword: '',
     email: '',
   });
+
+  const navigate = useNavigate(); // Get the navigate function
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,8 +31,9 @@ function JoinScreen() {
 
       if (response.status === 201) {
         console.log('Registration successful');
-        // You can redirect to the login screen or perform other actions as needed
-        // Example: history.push('/login');
+
+        // Redirect to the login screen after successful registration
+        navigate('/'); // Use the navigate function to navigate to the login screen
       } else {
         console.error('Registration failed');
       }
@@ -43,50 +46,50 @@ function JoinScreen() {
     <div className="join-screen">
       <h2>Join - Trail // Track</h2>
       <form onSubmit={handleSubmit}>
-    <label htmlFor="username">Username:</label>
-    <input
-      type="text"
-      id="username"
-      name="username"
-      value={formData.username}
-      onChange={handleInputChange}
-    />
+        <label htmlFor="username">Username:</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          value={formData.username}
+          onChange={handleInputChange}
+        />
 
-    <label htmlFor="name">Name:</label>
-    <input
-      type="text"
-      id="name"
-      name="name"
-      value={formData.name}
-      onChange={handleInputChange}
-    />
+        <label htmlFor="name">Name:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={formData.name}
+          onChange={handleInputChange}
+        />
 
-    <label htmlFor="password">Password:</label>
-    <input
-      type="password"
-      id="password"
-      name="password"
-      value={formData.password}
-      onChange={handleInputChange}
-    />
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={formData.password}
+          onChange={handleInputChange}
+        />
 
-    <label htmlFor="verifyPassword">Verify Password:</label>
-    <input
-      type="password"
-      id="verifyPassword"
-      name="verifyPassword"
-      value={formData.verifyPassword}
-      onChange={handleInputChange}
-    />
+        <label htmlFor="verifyPassword">Verify Password:</label>
+        <input
+          type="password"
+          id="verifyPassword"
+          name="verifyPassword"
+          value={formData.verifyPassword}
+          onChange={handleInputChange}
+        />
 
-    <label htmlFor="email">Email:</label>
-    <input
-      type="email"
-      id="email"
-      name="email"
-      value={formData.email}
-      onChange={handleInputChange}
-    />
+        <label htmlFor="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
+          onChange={handleInputChange}
+        />
         <button type="submit">Join</button>
       </form>
       <p>

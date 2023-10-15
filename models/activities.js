@@ -21,7 +21,7 @@ const activitySchema = new Schema({
   },
   formattedTime: { // Add this field for the properly formatted time
     type: String,
-    required: true,
+    required: false,
   },
   distance: {
     type: Number,
