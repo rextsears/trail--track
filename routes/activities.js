@@ -22,9 +22,6 @@ router.post('/trackServer', ensureAuthenticated, async (req, res) => {
         // Save the activity to the database
         const savedActivity = await newActivity.save();
 
-        // Update user statistics
-        await updateStats(req.user.id);
-
         res.json(savedActivity);
     } catch (error) {
         console.error(error);
@@ -50,8 +47,6 @@ router.put('/trackServer/:id', ensureAuthenticated, async (req, res) => {
             { new: true }
         );
 
-        // Update user statistics
-        await updateStats(req.user.id);
 
         res.json(updatedActivity);
     } catch (error) {
@@ -74,8 +69,6 @@ router.delete('/trackServer/:id', ensureAuthenticated, async (req, res) => {
 
         await Activity.findByIdAndRemove(activityId);
 
-        // Update user statistics after successfully deleting an activity
-        //await updateStats(userId);
 
         res.json({ message: 'Activity deleted successfully' });
     } catch (error) {
@@ -83,23 +76,5 @@ router.delete('/trackServer/:id', ensureAuthenticated, async (req, res) => {
         res.status(500).json({ error: 'Error deleting the activity' });
     }
 });
-
-// Function to update user statistics
-const updateStats = async (userId) => {
-    try {
-        // Find the user's statistics
-        let userStats = await UserStats.findOne({ userId });
-
-        // If no user statistics exist, create them
-        if (!userStats) {
-            userStats = new UserStats({ userId });
-        }
-
-        // Call the updateStatsOnAdventureAddition method to update user statistics
-        await userStats.updateStatsOnAdventureAddition();
-    } catch (error) {
-        console.error(error);
-    }
-};
 
 module.exports = router;

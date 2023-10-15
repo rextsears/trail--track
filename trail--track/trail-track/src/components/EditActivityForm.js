@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { editActivity } from '../api/trackServer'; // Import the editActivity function
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 
 function EditActivityForm({ activityData, onSubmit }) {
   const [formData, setFormData] = useState({ ...activityData });
+  const navigate = useNavigate();
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -12,6 +14,13 @@ function EditActivityForm({ activityData, onSubmit }) {
       [name]: type === 'checkbox' ? checked : value,
     });
   };
+
+    // Use useEffect to update the form data when activityData changes
+    useEffect(() => {
+      if (activityData) {
+        setFormData(activityData); // Set the initial state with activityData
+      }
+    }, [activityData]);    
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -29,12 +38,78 @@ function EditActivityForm({ activityData, onSubmit }) {
     }
   };
 
+  // Handle cancel button click
+  const handleCancel = () => {
+    if (activityData && activityData._id) {
+      navigate(`/activity/${activityData._id}`);
+    } else {
+      navigate('/all-activities');
+    }
+  };
+  
+
   return (
     <form onSubmit={handleSubmit}>
-      {/* Form inputs and labels, similar to the example in your original code */}
-      {/* ... */}
+      <div>
+        <label htmlFor="activityType">Activity Type:</label>
+        <input
+          type="text"
+          id="activityType"
+          name="activityType"
+          value={formData.activityType}
+          onChange={handleInputChange}
+        />
+      </div>
+  
+      <div>
+        <label htmlFor="distance">Distance (in miles):</label>
+        <input
+          type="number"
+          id="distance"
+          name="distance"
+          value={formData.distance}
+          onChange={handleInputChange}
+        />
+      </div>
+  
+      <div>
+        <label htmlFor="completionTime">Completion Time:</label>
+        <input
+          type="text"
+          id="completionTime"
+          name="completionTime"
+          value={formData.completionTime}
+          onChange={handleInputChange}
+        />
+      </div>
+  
+      <div>
+        <label htmlFor="location">Location:</label>
+        <input
+          type="text"
+          id="location"
+          name="location"
+          value={formData.location}
+          onChange={handleInputChange}
+        />
+      </div>
+  
+      <div>
+        <label htmlFor="accomplishment">Accomplishment:</label>
+        <textarea
+          id="accomplishment"
+          name="accomplishment"
+          value={formData.accomplishment}
+          onChange={handleInputChange}
+        />
+      </div>
+      <button type="button" className="cancel-button" onClick={handleCancel}>
+        Cancel
+      </button>
+      <button type="submit">Save Changes</button>
     </form>
   );
+  
 }
 
 export default EditActivityForm;

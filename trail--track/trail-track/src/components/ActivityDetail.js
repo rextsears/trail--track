@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { getActivities, deleteActivity } from '../api/trackServer.js';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getActivities, deleteActivity, editActivity } from '../api/trackServer.js';
 import TrackMap from './TrackMap';
+import EditActivityForm from './EditActivityForm'; // Import the EditActivityForm component
 import '../styles/map.css';
 
 function ActivityDetail() {
@@ -10,6 +11,7 @@ function ActivityDetail() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showConfirmation, setShowConfirmation] = useState(false); // State for showing the confirmation modal
+    const [editing, setEditing] = useState(false); // State for enabling edit mode
     const navigate = useNavigate(); // Access to the history object for redirection
 
     useEffect(() => {
@@ -49,6 +51,30 @@ function ActivityDetail() {
             });
     };
 
+    const handleEditClick = () => {
+        // Set the state to enable edit mode
+        setEditing(true);
+    };
+
+    const handleEditSubmit = async (editedData) => {
+        try {
+            // Make an API request to update the activity data
+            const response = await editActivity(activity._id, editedData);
+    
+            // Handle the response, maybe show a success message or update the UI
+            console.log('Activity updated successfully', response.data);
+    
+            // Update the local state with the updated data
+            setActivity(response.data);
+    
+            // Set editing to false to exit edit mode
+            setEditing(false);
+        } catch (error) {
+            console.error('Failed to update activity', error);
+            // Handle the error, show an error message, etc.
+        }
+    };     
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -67,7 +93,7 @@ function ActivityDetail() {
                 <li>Distance: {activity.distance}</li>
             </ul>
             <div className="button-container">
-                <Link to={`/edit/${id}`} className="edit-button">Edit</Link>
+                <button onClick={handleEditClick} className="edit-button">Edit</button>
                 <button onClick={() => setShowConfirmation(true)} className="delete-button">Delete</button>
             </div>
             <div className="map-container">
@@ -80,6 +106,10 @@ function ActivityDetail() {
                     <button onClick={handleDeleteConfirmation}>Yes</button>
                     <button onClick={() => setShowConfirmation(false)}>No</button>
                 </div>
+            )}
+
+            {editing && (
+                <EditActivityForm activityData={activity} onSubmit={handleEditSubmit} />
             )}
         </div>
     );
