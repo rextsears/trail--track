@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getUserStats, fetchUserName } from '../api/trackServer'; // Import the API function
+import { getUserStats, fetchUserName } from '../api/trackServer'; // Correct the import path
 
 function MainScreen() {
   const [stats, setStats] = useState({
@@ -10,6 +10,22 @@ function MainScreen() {
   });
   const [activeUserName, setActiveUserName] = useState(''); // State to hold the active user's name
 
+  // Define a function to fetch and update user stats
+  const updateUserStats = async () => {
+    try {
+      const response = await getUserStats();
+
+      if (response.status === 200) {
+        const data = response.data;
+        setStats(data);
+      } else {
+        console.error('Failed to fetch user stats');
+      }
+    } catch (error) {
+      console.error('Failed to fetch user stats:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       // Fetch user name when the component mounts
@@ -18,17 +34,8 @@ function MainScreen() {
         setActiveUserName(userName);
       }
 
-      try {
-        const response = await getUserStats();
-        if (response.status === 200) {
-          const data = response.data;
-          setStats(data);
-        } else {
-          console.error('Failed to fetch user stats');
-        }
-      } catch (error) {
-        console.error('Failed to fetch user stats:', error);
-      }
+      // Fetch and update user stats
+      updateUserStats();
     };
 
     fetchData();

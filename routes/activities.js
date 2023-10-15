@@ -16,7 +16,7 @@ router.post('/trackServer', ensureAuthenticated, async (req, res) => {
             completionTime,
             location,
             accomplishment,
-            userId: req.user.id // Assign the userId to associate the activity with the currently authenticated user
+            userId: req.user.id, // Assign the userId to associate the activity with the currently authenticated user
         });
 
         // Save the activity to the database

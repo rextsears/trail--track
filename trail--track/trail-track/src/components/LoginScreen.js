@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { login } from '../api/trackServer';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function LoginScreen() {
   const [loginFormData, setLoginFormData] = useState({ username: '', password: '' });
@@ -17,46 +16,52 @@ function LoginScreen() {
     const { username, password } = loginFormData;
 
     try {
-        const response = await login({ username, password });
+      // Make an HTTP POST request to your server's authentication endpoint
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-        if (response.status === 200) {
-            console.log('Login successful');
-            navigate('/main');
-        } else {
-            console.error('Login failed');
-        }
+      if (response.status === 200) {
+        console.log('Login successful');
+        navigate('/main');
+      } else {
+        console.error('Login failed');
+      }
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
-};
+  };
 
   return (
     <div className="login-screen">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          value={loginFormData.username}
-          onChange={handleInputChange}
-        />
-
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={loginFormData.password}
-          onChange={handleInputChange}
-        />
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value={loginFormData.username}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={loginFormData.password}
+            onChange={handleInputChange}
+          />
+        </div>
         <button type="submit">Login</button>
       </form>
-      <p>
-        Don't have an account?{' '}
-        <Link to="/join">Join Trail // Track</Link>
-      </p>
     </div>
   );
 }

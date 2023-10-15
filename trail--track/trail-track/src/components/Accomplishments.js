@@ -8,7 +8,7 @@ function Accomplishments() {
     axios
       .get('http://localhost:5001/api/activities')
       .then((response) => {
-        console.log(response.data); // Log the response data
+        console.log(response); // Log the response data
         // Filter the data to get only accomplishments with "true"
         const filteredAccomplishments = response.data.filter(
           (accomplishment) => accomplishment.accomplishment === true
@@ -30,7 +30,6 @@ function Accomplishments() {
             <th>Location</th>
             <th>Completion Time</th>
             <th>Distance</th>
-            <th>Accomplishment</th>
           </tr>
         </thead>
         <tbody>
@@ -41,7 +40,6 @@ function Accomplishments() {
                 <td>{accomplishment.location}</td>
                 <td>{accomplishment.completionTime}</td>
                 <td>{accomplishment.distance}</td>
-                <td>{accomplishment.accomplishment}</td>
               </tr>
             ))
           ) : (

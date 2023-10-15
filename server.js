@@ -98,6 +98,19 @@ app.get('/api/user/details', (req, res) => {
   }
 });
 
+// Define a route to retrieve all activities
+app.use('/api/activities', ensureAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const activities = await Activity.find({ userId });
+    console.log('Activities:', activities); // Log activities to check if they are retrieved correctly
+    res.json(activities);
+  } catch (error) {
+    console.error('Error fetching activities:', error);
+    res.status(500).json({ error: 'Failed to retrieve activities' });
+  }
+});
+
 // Route to fetch user statistics
 app.get('/api/user/stats', ensureAuthenticated, async (req, res) => {
   try {
@@ -143,21 +156,63 @@ app.post('/api/login', authRoutes);
 const activitiesRoutes = require('./routes/activities');
 app.use('/api', activitiesRoutes); // This prefix ensures that all routes in activitiesRoutes start with /api
 
-// Route to manually update user statistics for development purposes
-app.post('/updatestats', ensureAuthenticated, async (req, res) => {
+// Development function - manual database update
+app.get('/updateActivities', (req, res) => {
   try {
-    const userId = req.user._id; // Get the user's ID from the authenticated user
+    // Execute the script to update activities
+    require('./updateActivities');
+
+    res.json({ message: 'Updating activities with userId field...' });
+  } catch (error) {
+    console.error('Error updating activities:', error);
+    res.status(500).json({ error: 'Error updating activities' });
+  }
+});
+
+// Development function - manual database update for activities with formattedTime
+app.get('/updateActivitiesWithFormattedTime', (req, res) => {
+  try {
+    // Execute the script to update activities with formattedTime
+    require('./updateActivitiesWithFormattedTime');
+
+    res.json({ message: 'Updating activities with formattedTime...' });
+  } catch (error) {
+    console.error('Error updating activities with formattedTime:', error);
+    res.status(500).json({ error: 'Error updating activities with formattedTime' });
+  }
+});
+
+// Development funtion - manual user stats update
+app.get('/updatestats', async (req, res) => {
+  try {
+    const username = req.query.username; // Get the username from the query parameter
+
+    console.log(`Updating user statistics for username: ${username}`);
+
+    // Find the user based on the username
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      console.error(`User with username ${username} not found`);
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Get the user's ID
+    const userId = user._id;
+
+    console.log(`Updating statistics for user ID: ${userId}`);
 
     // Call the function to update user stats
     await updateStats(userId);
 
+    console.log(`User statistics updated successfully for username: ${username}`);
+
     res.json({ message: 'User statistics updated successfully' });
   } catch (error) {
-    console.error(error);
+    console.error('Error updating user statistics:', error);
     res.status(500).json({ error: 'Error updating user statistics' });
   }
 });
-
 
 // Handle any other routes by serving the React app
 app.get('/*', (req, res) => {

@@ -12,6 +12,7 @@ const userStatsSchema = new Schema({
 // Create the UserStats model
 const UserStats = mongoose.model('UserStats', userStatsSchema);
 
+/*
 // Function to update user statistics when a new adventure is added
 userStatsSchema.methods.updateStatsOnAdventureAddition = async function () {
   try {
@@ -44,5 +45,6 @@ userStatsSchema.methods.updateStatsOnAdventureAddition = async function () {
     console.error('Error updating user statistics:', error);
   }
 };
+*/
 
 module.exports = UserStats;

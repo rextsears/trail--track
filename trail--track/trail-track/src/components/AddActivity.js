@@ -1,13 +1,17 @@
-// eslint-disable-next-line
-import React, { useState } from 'react';
-import AddActivityForm from './AddActivityForm'; // Import the AddActivityForm component
-import { Link } from 'react-router-dom';
+import React from 'react';
+import AddActivityForm from './AddActivityForm';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 
 function AddActivity() {
+  const navigate = useNavigate(); // Initialize useNavigate
+
   // Handle the submission of the form data, e.g., display a success message
   const handleFormSubmit = (addedActivity) => {
     console.log('Activity added successfully:', addedActivity);
     // You can perform additional actions here, such as updating the UI or showing a success message.
+
+    // Redirect to '/main' after adding the activity
+    navigate('/main');
   };
 
   return (
