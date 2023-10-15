@@ -1,0 +1,91 @@
+.main-screen {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh; /* 100% of the viewport height */
+    margin: 0; /* Remove default margin */
+}
+.dashboard-container {
+    padding: 20px;
+}
+
+.dashboard-stats {
+    display: flex;
+    justify-content: space-between;
+}
+
+.stats-container {
+    flex: 3;
+    padding: 20px;
+    background-color: #fff;
+}
+.stat {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+.stath3 {
+    color: #333;
+}
+.stat p {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    text-align: center;
+}
+.my-stats {
+    width: 100%;
+    max-width: 1200px; /* or any suitable width you prefer */
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0px 1px 10px #091833;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+    background-color: #ECECEC; /* Grayish background to match wireframe */
+}
+
+.stat {
+    flex: 1; /* Distribute space evenly among stats */
+    padding: 20px;
+    text-align: center;
+    background-color: #D4D4D4; /* Slightly darker gray for the stats box */
+    border-radius: 10px; /* Rounded edges for the stats box */
+    margin: 0 10px; /* Space between stats boxes */
+}
+.navigation {
+    width: 100%;
+    max-width: 1200px;
+}
+.navigation ul {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 30px; /* Add space above the navigation */
+    background-color: #333;
+    color: white;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.navigation li {
+    margin-right: 20px; /* Space between navigation items */
+}
+
+.navigation a {
+    text-decoration: none; /* Remove underline */
+    color: white; /* Dark color for text */
+    border-bottom: 2px solid transparent; /* Prepare for hover effect */
+    transition: border-bottom 0.3s; /* Smooth transition */
+}
+
+.navigation a:hover {
+    border-bottom: 2px solid white; /* Underline effect on hover */
+}

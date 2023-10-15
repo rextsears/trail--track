@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom'; // Import Link from react-router-dom
+import '../styles/common.css';
+import '../styles/login.css';
 
 function LoginScreen() {
   const [loginFormData, setLoginFormData] = useState({ username: '', password: '' });
@@ -38,10 +40,11 @@ function LoginScreen() {
 
   return (
     <div className="login-screen">
-      <h2>Login</h2>
+      <h1>Trail // Track</h1>
+      <h2 id="login-label">Login</h2>
       <form onSubmit={handleLogin}>
         <div className="form-group">
-          <label htmlFor="username">Username</label>
+          <label htmlFor="username">Username // </label>
           <input
             type="text"
             id="username"
@@ -51,7 +54,7 @@ function LoginScreen() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">Password // </label>
           <input
             type="password"
             id="password"
@@ -60,11 +63,11 @@ function LoginScreen() {
             onChange={handleInputChange}
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" class="loginbutton">Login</button>
       </form>
 
       {/* Add a "Join" link to the registration screen */}
-      <p>
+      <p id="join">
         New user? <Link to="/join">Join</Link>
       </p>
     </div>

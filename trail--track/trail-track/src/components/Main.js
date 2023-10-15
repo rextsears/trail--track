@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getUserStats, fetchUserName } from '../api/trackServer'; // Correct the import path
+import '../styles/common.css';
+import '../styles/main.css';
 
 function MainScreen() {
   const [stats, setStats] = useState({
@@ -43,27 +45,28 @@ function MainScreen() {
 
   return (
     <div className="main-screen">
+      <h1>Trail // Track</h1>
       <h2>Welcome // {activeUserName}!</h2> {/* Display the greeting */}
       <div className="my-stats">
         <h2>My Stats</h2>
         <div className="stats-container">
           <div className="stat">
-            <h3>Adventures</h3>
-            <p>{stats.adventures}</p>
+            <h3 className="stath3">Adventures</h3>
+            <p className="statp">{stats.adventures}</p>
           </div>
           <div className="stat">
-            <h3>Total Distance</h3>
-            <p>{stats.totalDistance} miles</p>
+            <h3 className="stath3">Total Distance</h3>
+            <p className="statp">{stats.totalDistance} miles</p>
           </div>
           <div className="stat">
-            <h3>Total Time</h3>
-            <p>{stats.totalTime} minutes</p>
+            <h3 className="stath3">Total Time</h3>
+            <p className="statp">{stats.totalTime} minutes</p>
           </div>
         </div>
       </div>
       <div className="navigation">
         <ul>
-          <li><a href="/add-activity">+ Add Activity</a></li>
+          <li><a href="/add-activity">+ Add New</a></li>
           <li><Link to="/all-activities">All Activities</Link></li>
           <li><Link to="/accomplishments">Accomplishments</Link></li>
           <li><Link to="/activity-map">Activity Map</Link></li>
