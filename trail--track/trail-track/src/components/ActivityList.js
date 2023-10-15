@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import { getActivities } from '../api/trackServer.js';
 
 function ActivityList() {
@@ -40,6 +41,7 @@ function ActivityList() {
             <th>Completion Time</th>
             <th>Distance</th>
             <th>Accomplishment</th>
+            <th> // </th>
           </tr>
         </thead>
         <tbody>
@@ -51,11 +53,14 @@ function ActivityList() {
                 <td>{activity.completionTime}</td>
                 <td>{activity.distance}</td>
                 <td>{activity.accomplishment ? 'Yes' : 'No'}</td>
+                <td>
+                  <Link to={`/activity/${activity._id}`}>Detail</Link> {/* Link to ActivityDetail page */}
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="5">No activities to display.</td>
+              <td colSpan="6">No activities to display.</td>
             </tr>
           )}
         </tbody>

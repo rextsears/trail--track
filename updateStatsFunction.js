@@ -1,18 +1,20 @@
-function parseTimeString(timeString) {
+const mongoose = require('mongoose');
+const UserStats = require('./models/userStats');
+const Activity = require('./models/activities');
+
+const parseTimeString = function parseTimeString(timeString) {
+  console.log('Parsing time string:', timeString);
   const [minutes, seconds] = timeString.split(':').map(Number);
+  console.log('Minutes:', minutes, 'Seconds:', seconds);
   const milliseconds = Number(timeString.split('.')[1]);
+  console.log('Milliseconds:', milliseconds);
   return milliseconds + seconds * 1000 + minutes * 60 * 1000;
 }
-
-const mongoose = require('mongoose');
-const UserStats = require('./models/userStats'); // Import the UserStats model
-const Activity = require('./models/activities'); // Import the Activity model
 
 const updateStats = async (userId) => {
   try {
     console.log('Updating user statistics for user:', userId);
 
-    // Your modified code to update user statistics
     const updatedStats = await Activity.aggregate([
       {
         $match: { userId: userId },
@@ -25,30 +27,15 @@ const updateStats = async (userId) => {
           totalTime: {
             $sum: {
               $add: [
-                { $multiply: ['$time.hours', 3600000] },
-                { $multiply: ['$time.minutes', 60000] },
-                { $multiply: ['$time.seconds', 1000] },
-                { $toDouble: '$time.milliseconds' },
-                {
-                  $reduce: {
-                    input: {
-                      $map: {
-                        input: { $split: ['$formattedTime', '.'] },
-                        as: 'timePart',
-                        in: { $cond: [{ $eq: ['$$timePart', ''] }, 0, { $toDouble: '$$timePart' }] },
-                      },
-                    },
-                    initialValue: 0,
-                    in: {
-                      $add: [
-                        '$$value',
-                        { $multiply: [{ $arrayElemAt: ['$$this', 0] }, 60000] },
-                        { $multiply: [{ $arrayElemAt: ['$$this', 1] }, 1000] },
-                        { $arrayElemAt: ['$$this', 2] },
-                      ],
-                    },
-                  },
-                },             
+                { $multiply: ['$time.hours', 60] }, // Convert hours to minutes
+                { $multiply: ['$time.minutes', 1] }, // Convert minutes to minutes
+                { $divide: ['$time.seconds', 60] }, // Convert seconds to minutes
+                { $divide: ['$time.milliseconds', 60000] }, // Convert milliseconds to minutes
+                { $reduce: { // Convert formattedTime to minutes using parseTimeString
+                  input: { $split: ['$formattedTime', '.'] },
+                  initialValue: 0,
+                  in: { $add: ['$$value', { $divide: [parseTimeString('$$this'), 60000] }] },
+                } },
               ],
             },
           },
@@ -65,13 +52,10 @@ const updateStats = async (userId) => {
 
     console.log('Updated statistics:', updatedStats);
 
-    // Update the user's statistics
     const [updatedStat] = updatedStats;
 
-    // Find the user's statistics
     let userStats = await UserStats.findOne({ userId });
 
-    // If no user statistics exist, create them
     if (!userStats) {
       userStats = new UserStats({ userId });
     }
@@ -83,7 +67,7 @@ const updateStats = async (userId) => {
       await userStats.save();
       console.log('User statistics updated successfully');
     } else {
-      console.log('No activities found for this user'); // Adjust the message if needed
+      console.log('No activities found for this user');
     }
   } catch (error) {
     console.error('Error updating user statistics:', error);

@@ -7,6 +7,7 @@ import EditActivityForm from './components/EditActivityForm';
 import JoinScreen from './components/JoinScreen';
 import ActivityList from './components/ActivityList';
 import Accomplishments from './components/Accomplishments';
+import ActivityDetail from './components/ActivityDetail'; // Import the ActivityDetail component
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/join" element={<JoinScreen />} />
         <Route path="/all-activities" element={<ActivityList />} />
         <Route path="/accomplishments" element={<Accomplishments />} />
+        <Route path="/activity/:id" element={<ActivityDetail />} />
       </Routes>
     </Router>
   );
