@@ -1,16 +1,19 @@
 const express = require('express');
-const session = require('express-session'); // Import express-session
+const session = require('express-session');
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
-const app = express();
-require('dotenv').config();
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const User = require('./models/user'); // Import the User model
-const { ensureAuthenticated } = require('./config/authMiddleware'); // Adjust the path as needed
-const crypto = require('crypto');
-const jwt = require('jsonwebtoken'); // Import the jsonwebtoken module
+const User = require('./models/user');
+const UserStats = require('./models/userStats');
+const { ensureAuthenticated } = require('./config/authMiddleware');
+const Activity = require('./models/activities');
+const updateStats = require('./updateStatsFunction'); 
+
+require('dotenv').config();
+
+const app = express();
 
 // Import the database connection
 const db = require('./config/database');
@@ -19,14 +22,12 @@ const db = require('./config/database');
 const corsOptions = {
   origin: 'http://localhost:3000',
   optionsSuccessStatus: 200,
+  credentials: true,
 };
 app.use(cors(corsOptions));
 
 // Middleware: Serve static files from the "build" directory
 app.use(express.static(path.join(__dirname, 'trail--track/trail-track/build')));
-
-// Import Mongoose model for activities (if it's in a file named activities.js)
-const Activity = require('./models/activities'); // Update the model name to 'Activity'
 
 // Middleware: Parse JSON requests
 app.use(express.json());
@@ -71,7 +72,7 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // Initialize Passport
-const secret = crypto.randomBytes(32).toString('hex');
+const secret = '20991f72a7dcdc6b65ea4efebd4abfec0254eb3d8e136619c70a2828a6c04164';
 
 app.use(
   session({
@@ -83,109 +84,80 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-const secretKey = crypto.randomBytes(32).toString('hex');
-
-// Middleware to verify JWT token
-const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization;
-  if (!token) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
-  // Verify the token using the secret key you have defined
-  jwt.verify(token, secretKey, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ error: 'Token is invalid' });
-    }
-
-    // Attach the user ID to the request
-    req.userId = decoded.userId;
-    next();
-  });
-};
-
-// Use the middleware in your protected route
-app.get('/api/activities', verifyToken, async (req, res) => {
-  // Now, req.userId contains the user's ID
-  // Fetch activities for the authenticated user using req.userId
-});
-
 // Import the join route
 const joinRoutes = require('./routes/join');
 // Mount the join route under the desired namespace, e.g., "/api/join"
 app.use('/api/join', joinRoutes);
 
-// Mount user-related routes from the user route file
-const userRoutes = require('./routes/user');
-app.use('/api/user', userRoutes);
+// Route to fetch user details
+app.get('/api/user/details', (req, res) => {
+  if (req.isAuthenticated()) {
+      res.json(req.user);  // Send back user details
+  } else {
+      res.status(401).json({ message: "Not authenticated" });  // 401 Unauthorized
+  }
+});
+
+// Route to fetch user statistics
+app.get('/api/user/stats', ensureAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user._id; // Get the user's ID from the authenticated user
+    const userStats = await UserStats.findOne({ userId }); // Filter statistics by userId
+
+    if (!userStats) {
+      // If no user statistics are found, you can return an appropriate response
+      return res.status(404).json({ error: 'User statistics not found' });
+    }
+
+    // Respond with the user statistics as JSON
+    res.json(userStats);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch user statistics' });
+  }
+});
+
+// Route to fetch only the user's name
+app.get('/api/user/name', ensureAuthenticated, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id, 'name');
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({ name: user.name });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch user name' });
+  }
+});
+
 
 // Import the auth route
 const authRoutes = require('./routes/auth'); // Update the path to auth.js
 // Mount the auth route under the "/api/login" namespace
 app.post('/api/login', authRoutes);
 
-// New route to retrieve activities for the active user
-app.get('/api/activities', ensureAuthenticated, async (req, res) => {
-  try {
-    // Retrieve activities only for the currently authenticated user
-    const activities = await Activity.find({ userId: req.user.id }); // Assuming there is a 'userId' field in the activities model
+// Mount the activities route
+const activitiesRoutes = require('./routes/activities');
+app.use('/api', activitiesRoutes); // This prefix ensures that all routes in activitiesRoutes start with /api
 
-    res.json(activities);
+// Route to manually update user statistics for development purposes
+app.post('/updatestats', ensureAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user._id; // Get the user's ID from the authenticated user
+
+    // Call the function to update user stats
+    await updateStats(userId);
+
+    res.json({ message: 'User statistics updated successfully' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to retrieve activities' });
+    res.status(500).json({ error: 'Error updating user statistics' });
   }
 });
 
-// API route to save a new activity
-app.post('/api/trackServer', ensureAuthenticated, async (req, res) => {
-  try {
-    const { activityType, distance, completionTime, location, accomplishment } = req.body;
-
-    // Create a new activity document
-    const newActivity = new Activity({
-      activityType,
-      distance,
-      completionTime,
-      location,
-      accomplishment,
-      userId: req.user.id, // Assign the userId to associate the activity with the currently authenticated user
-    });
-
-    // Save the activity to the database
-    const savedActivity = await newActivity.save();
-
-    res.json(savedActivity);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to save the activity' });
-  }
-});
-
-// API route to edit an existing activity
-app.put('/api/trackServer/:id', ensureAuthenticated, async (req, res) => {
-  try {
-    const { activityType, distance, completionTime, location, accomplishment } = req.body;
-
-    // Find the activity by ID and update its fields
-    const updatedActivity = await Activity.findByIdAndUpdate(
-      req.params.id,
-      {
-        activityType,
-        distance,
-        completionTime,
-        location,
-        accomplishment,
-      },
-      { new: true }
-    );
-
-    res.json(updatedActivity);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to update the activity' });
-  }
-});
 
 // Handle any other routes by serving the React app
 app.get('/*', (req, res) => {

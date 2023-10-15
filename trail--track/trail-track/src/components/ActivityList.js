@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { getActivities } from '../api/trackServer.js';
 
 function ActivityList() {
   const [activities, setActivities] = useState([]);
@@ -7,21 +7,18 @@ function ActivityList() {
   useEffect(() => {
     // Fetch activities when the component mounts
     const token = localStorage.getItem('authToken'); // Retrieve the token from local storage
-    //console.log('Token:', token);
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-    
-    axios
-      .get('http://localhost:5001/api/activities', { headers }) // Include the headers
+    console.log('Token in ActivityList.js:', token);
+
+    getActivities(token)
       .then((response) => {
         console.log(response.data); // Log the response data
         setActivities(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching activities:', error);
-      });
+        console.error('Error fetching activities:', error.response ? error.response.data : error.message);
+      });      
   }, []); // The empty dependency array ensures this effect runs once when the component mounts
+
 
   return (
     <div>

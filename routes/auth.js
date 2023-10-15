@@ -1,35 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
-const jwt = require('jsonwebtoken');
+const passport = require('passport');
 
 // Route to handle user login
-router.post('/api/login', async (req, res) => {
-  try {
-    const { username, password } = req.body;
-
-    // Find the user by username
-    const user = await User.findOne({ username });
-
+router.post('/api/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      console.error('Login failed:', err);
+      return res.status(500).json({ error: 'Login failed' });
+    }
     if (!user) {
       return res.status(401).json({ error: 'Invalid username or password' });
     }
-
-    // Compare the provided password with the password in the database
-    if (password !== user.password) {
-      return res.status(401).json({ error: 'Invalid username or password' });
-    }
-
-    // Create a JWT token
-    const token = jwt.sign({ userId: user._id }, 'your-secret-key', { expiresIn: '1h' });
-
-    // Send the token in the response
-    res.status(200).json({ message: 'Login successful', token });
-  } catch (error) {
-    console.error('Login failed:', error);
-    res.status(500).json({ error: 'Login failed' });
-  }
+    req.logIn(user, (loginErr) => {
+      if (loginErr) {
+        return res.status(500).json({ error: 'Login failed' });
+      }
+      // Send a success response. Optionally, you can also send user data if needed.
+      return res.status(200).json({ message: 'Login successful' });
+    });
+  })(req, res, next);
 });
 
 module.exports = router;
-

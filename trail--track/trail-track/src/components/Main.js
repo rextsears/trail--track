@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getUserStats } from '../api/trackServer'; // Import the API function
+import { getUserStats, fetchUserName } from '../api/trackServer'; // Import the API function
 
 function MainScreen() {
   const [stats, setStats] = useState({
@@ -11,7 +11,13 @@ function MainScreen() {
   const [activeUserName, setActiveUserName] = useState(''); // State to hold the active user's name
 
   useEffect(() => {
-    const fetchUserStats = async () => {
+    const fetchData = async () => {
+      // Fetch user name when the component mounts
+      const userName = await fetchUserName();
+      if (userName !== null) {
+        setActiveUserName(userName);
+      }
+
       try {
         const response = await getUserStats();
         if (response.status === 200) {
@@ -25,16 +31,7 @@ function MainScreen() {
       }
     };
 
-    // Fetch user stats and active user's name
-    fetchUserStats();
-
-    // Retrieve the active user's name from the user object (you might need to adapt this based on your user object structure)
-    // Here, we assume that the user object is available after login and contains a 'name' field
-    const activeUser = JSON.parse(localStorage.getItem('user')); // Example: Storing the user object in localStorage
-
-    if (activeUser) {
-      setActiveUserName(activeUser.name); // Set the active user's name in the state
-    }
+    fetchData();
   }, []);
 
   return (

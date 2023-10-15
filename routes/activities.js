@@ -5,96 +5,101 @@ const UserStats = require('../models/userStats'); // Import the UserStats model
 const { ensureAuthenticated } = require('../config/authMiddleware'); // Import the authentication middleware
 
 // Handle adding a new activity
-router.post('/api/activities', ensureAuthenticated, async (req, res) => {
-  try {
-    // Implementation for adding a new activity
-    // This code will depend on your specific use case
-    // After successfully adding an activity, update user statistics
-    // Example: Save the newly added activity document to 'newActivity'
-    const newActivity = await new Activity({
-      // ... (activity data)
-    }).save();
+router.post('/trackServer', ensureAuthenticated, async (req, res) => {
+    try {
+        const { activityType, distance, completionTime, location, accomplishment } = req.body;
 
-    // Update user statistics
-    await updateStats(req.user._id); // Assuming you have authenticated the user and their ID is available in req.user
+        // Create a new activity document
+        const newActivity = new Activity({
+            activityType,
+            distance,
+            completionTime,
+            location,
+            accomplishment,
+            userId: req.user.id // Assign the userId to associate the activity with the currently authenticated user
+        });
 
-    res.json(newActivity);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to save the activity' });
-  }
+        // Save the activity to the database
+        const savedActivity = await newActivity.save();
+
+        // Update user statistics
+        await updateStats(req.user.id);
+
+        res.json(savedActivity);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to save the activity' });
+    }
 });
 
 // Handle editing an existing activity
-router.put('/api/activities/:id', ensureAuthenticated, async (req, res) => {
-  try {
-    // Implementation for editing an existing activity
-    // This code will depend on your specific use case
-    // After successfully editing the activity, update user statistics
+router.put('/trackServer/:id', ensureAuthenticated, async (req, res) => {
+    try {
+        const { activityType, distance, completionTime, location, accomplishment } = req.body;
 
-    // Example: Update the activity document
+        // Find the activity by ID and update its fields
+        const updatedActivity = await Activity.findByIdAndUpdate(
+            req.params.id,
+            {
+                activityType,
+                distance,
+                completionTime,
+                location,
+                accomplishment,
+            },
+            { new: true }
+        );
 
-    // Update user statistics
-    await updateStats(req.user._id); // Assuming you have authenticated the user and their ID is available in req.user
+        // Update user statistics
+        await updateStats(req.user.id);
 
-    res.json(updatedActivity);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to update the activity' });
-  }
+        res.json(updatedActivity);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to update the activity' });
+    }
 });
 
 // Handle deleting an activity
-router.delete('/api/activities/:id', ensureAuthenticated, async (req, res) => {
-  try {
-    const activityId = req.params.id;
-    const userId = req.user._id; // Assuming you have authenticated the user and their ID is available in req.user
+router.delete('/activities/:id', ensureAuthenticated, async (req, res) => {
+    try {
+        const activityId = req.params.id;
+        const userId = req.user.id;
 
-    const activity = await Activity.findOne({ _id: activityId, createdBy: userId });
+        const activity = await Activity.findOne({ _id: activityId, userId: userId });
 
-    if (!activity) {
-      return res.status(404).json({ error: 'Activity not found or you do not have permission to delete it' });
+        if (!activity) {
+            return res.status(404).json({ error: 'Activity not found or you do not have permission to delete it' });
+        }
+
+        await Activity.findByIdAndRemove(activityId);
+
+        // Update user statistics after successfully deleting an activity
+        await updateStats(userId);
+
+        res.json({ message: 'Activity deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error deleting the activity' });
     }
-
-    await Activity.findByIdAndRemove(activityId);
-
-    // Update user statistics after successfully deleting an activity
-    await updateStats(userId);
-
-    res.json({ message: 'Activity deleted successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error deleting the activity' });
-  }
 });
 
 // Function to update user statistics
 const updateStats = async (userId) => {
-  try {
-    // Assuming you have a method in your model to update user stats for a specific user
-    const userStats = await UserStats.findOne({ userId });
-    
-    if (userStats) {
-      await userStats.updateUserStats(); 
+    try {
+        // Find the user's statistics
+        let userStats = await UserStats.findOne({ userId });
+
+        // If no user statistics exist, create them
+        if (!userStats) {
+            userStats = new UserStats({ userId });
+        }
+
+        // Call the updateStatsOnAdventureAddition method to update user statistics
+        await userStats.updateStatsOnAdventureAddition();
+    } catch (error) {
+        console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-  }
 };
-
-
-// Define a route to retrieve all activities
-router.get('/api/activities', ensureAuthenticated, async (req, res) => {
-  try {
-    const userId = req.user._id; // Get the user's ID from the authenticated user
-    const activities = await Activity.find({ userId }); // Filter activities by userId
-
-    res.json(activities);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to retrieve activities' });
-  }
-});
-
 
 module.exports = router;

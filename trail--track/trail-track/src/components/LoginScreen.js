@@ -13,25 +13,22 @@ function LoginScreen() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
     const { username, password } = loginFormData;
 
     try {
-      const response = await login({ username, password });
-  
-      if (response.status === 200) {
-        const token = response.data.token; // Extract the token from the response
-        localStorage.setItem('authToken', token); // Store the token in localStorage
+        const response = await login({ username, password });
 
-        console.log('Login successful');
-        navigate('/main'); 
-      } else {
-        console.error('Login failed');
-      }
+        if (response.status === 200) {
+            console.log('Login successful');
+            navigate('/main');
+        } else {
+            console.error('Login failed');
+        }
     } catch (error) {
-      console.error(error);
+        console.error(error);
     }
-  };  
+};
 
   return (
     <div className="login-screen">
