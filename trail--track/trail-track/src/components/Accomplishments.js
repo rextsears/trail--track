@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function Accomplishments() {
   const [accomplishments, setAccomplishments] = useState([]);
@@ -49,6 +50,7 @@ function Accomplishments() {
           )}
         </tbody>
       </table>
+      <Link to="/main">Return to Main</Link>
     </div>
   );
 }

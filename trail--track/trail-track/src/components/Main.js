@@ -69,7 +69,7 @@ function MainScreen() {
           <li><a href="/add-activity">+ Add New</a></li>
           <li><Link to="/all-activities">All Activities</Link></li>
           <li><Link to="/accomplishments">Accomplishments</Link></li>
-          <li><Link to="/activity-map">Activity Map</Link></li>
+          <li><Link to="/only-map">Activity Map</Link></li>
         </ul>
       </div>
     </div>

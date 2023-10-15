@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom'; // Import Link
 import { getActivities, deleteActivity, editActivity } from '../api/trackServer.js';
 import TrackMap from './TrackMap';
 import EditActivityForm from './EditActivityForm'; // Import the EditActivityForm component
-import '../styles/map.css';
+import '../styles/common.css';
+import '../styles/activitydetail.css';
 
 function ActivityDetail() {
     const { id } = useParams();
@@ -56,24 +57,29 @@ function ActivityDetail() {
         setEditing(true);
     };
 
+    const handleCancel = () => {
+        // Set the state to disable edit mode
+        setEditing(false);
+    };
+
     const handleEditSubmit = async (editedData) => {
         try {
             // Make an API request to update the activity data
             const response = await editActivity(activity._id, editedData);
-    
+
             // Handle the response, maybe show a success message or update the UI
             console.log('Activity updated successfully', response.data);
-    
+
             // Update the local state with the updated data
             setActivity(response.data);
-    
+
             // Set editing to false to exit edit mode
             setEditing(false);
         } catch (error) {
             console.error('Failed to update activity', error);
             // Handle the error, show an error message, etc.
         }
-    };     
+    };
 
     if (loading) {
         return <div>Loading...</div>;
@@ -87,19 +93,30 @@ function ActivityDetail() {
         <div>
             <h2>Activity Detail</h2>
             <ul className="detail-container">
-                <li>Activity Type: {activity.activityType}</li>
-                <li>Location: {activity.location}</li>
-                <li>Completion Time: {activity.completionTime}</li>
-                <li>Distance: {activity.distance}</li>
+                <li>Activity Type: <section>{activity.activityType}</section></li>
+                <li>Location: <section>{activity.location}</section></li>
+                <li>Completion Time: <section>{activity.completionTime}</section></li>
+                <li>Distance: <section>{activity.distance}</section></li>
             </ul>
             <div className="button-container">
-                <button onClick={handleEditClick} className="edit-button">Edit</button>
-                <button onClick={() => setShowConfirmation(true)} className="delete-button">Delete</button>
+                {!editing && ( // Display the "Edit" button when not in edit mode
+                    <button onClick={handleEditClick} className="edit-button">
+                        Edit
+                    </button>
+                )}
+                {!editing && ( // Display the delete button when not in edit mode
+                    <button onClick={() => setShowConfirmation(true)} className="delete-button">
+                        Delete
+                    </button>
+                )}
+                {editing && ( // Display the "Cancel" button when in edit mode
+                    <button onClick={handleCancel} className="cancel-button">
+                        Cancel
+                    </button>
+                )}
+                <Link to="/main">Return to Main</Link> {/* Link to Main.js */}
+                <Link to="/all-activities">Return to Activity List</Link> {/* Link to ActivityList.js */}
             </div>
-            <div className="map-container">
-                <TrackMap />
-            </div>
-
             {showConfirmation && ( // Display the confirmation modal when showConfirmation is true
                 <div className="confirmation-modal">
                     <p>Are you sure you want to delete this activity?</p>
@@ -110,6 +127,11 @@ function ActivityDetail() {
 
             {editing && (
                 <EditActivityForm activityData={activity} onSubmit={handleEditSubmit} />
+            )}
+            {!editing && ( // Display the map when not in edit mode
+                <div className="map-container">
+                    <TrackMap />
+                </div>
             )}
         </div>
     );

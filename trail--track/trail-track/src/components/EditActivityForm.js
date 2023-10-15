@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { editActivity } from '../api/trackServer'; // Import the editActivity function
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 
 function EditActivityForm({ activityData, onSubmit }) {
   const [formData, setFormData] = useState({ ...activityData });
-  const navigate = useNavigate();
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -35,15 +33,6 @@ function EditActivityForm({ activityData, onSubmit }) {
     } catch (error) {
       console.error('Failed to update activity', error);
       // Handle the error, show an error message, etc.
-    }
-  };
-
-  // Handle cancel button click
-  const handleCancel = () => {
-    if (activityData && activityData._id) {
-      navigate(`/activity/${activityData._id}`);
-    } else {
-      navigate('/all-activities');
     }
   };
   
@@ -103,9 +92,6 @@ function EditActivityForm({ activityData, onSubmit }) {
           onChange={handleInputChange}
         />
       </div>
-      <button type="button" className="cancel-button" onClick={handleCancel}>
-        Cancel
-      </button>
       <button type="submit">Save Changes</button>
     </form>
   );

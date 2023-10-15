@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 import { getActivities } from '../api/trackServer.js';
+import '../styles/common.css';
+import '../styles/activitylist.css';
 
 function ActivityList() {
   const [activities, setActivities] = useState([]);
@@ -32,7 +34,8 @@ function ActivityList() {
 
   return (
     <div>
-      <h1>All Activities</h1>
+      <h1 className="alh1">Trail // Track</h1>
+      <h2 className="alh2">All Activities</h2>
       <table>
         <thead>
           <tr>
@@ -41,7 +44,7 @@ function ActivityList() {
             <th>Completion Time</th>
             <th>Distance</th>
             <th>Accomplishment</th>
-            <th> // </th>
+            <th>  </th>
           </tr>
         </thead>
         <tbody>
@@ -54,7 +57,7 @@ function ActivityList() {
                 <td>{activity.distance}</td>
                 <td>{activity.accomplishment ? 'Yes' : 'No'}</td>
                 <td>
-                  <Link to={`/activity/${activity._id}`}>Detail</Link> {/* Link to ActivityDetail page */}
+                  <Link to={`/activity/${activity._id}`}>Detail</Link>
                 </td>
               </tr>
             ))
@@ -65,6 +68,7 @@ function ActivityList() {
           )}
         </tbody>
       </table>
+      <Link to="/main">Return to Main</Link>
     </div>
   );
 }

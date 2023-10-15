@@ -1,5 +1,5 @@
 body {
-    font-family: 'Arial', sans-serif; 
+    font-family: 'Roboto', sans-serif;
     background-color: #f4f4f4; 
     color: #333; 
     margin: 0;
@@ -19,7 +19,7 @@ h1 {
 }
 h2 {
     font-size: 24px;
-    margin: 10px 0; /* Space above and below the h2 */
+    margin: 10px 0;
     text-align: center;
 }
 
