@@ -55,9 +55,20 @@
 ###
 
 ## Screenshots
-### _Home Page_
+### _Login Screen / Home Page_
+![landing_login](./README_images/screenshots/landing_login.png)
 
 ### _App Functions_
+##
+![main](./README_images/screenshots/main.png)
+##
+![allactivities](./README_images/screenshots/allactivities.png)
+##
+![activitydetail](./README_images/screenshots/activitydetail.png)
+##
+![accomplishments](./README_images/screenshots/accomplishments.png)
+##
+![addnew](./README_images/screenshots/addnew.png)
 ##
 
 ## User Stories
