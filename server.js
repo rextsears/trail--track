@@ -9,7 +9,7 @@ const User = require('./models/user');
 const UserStats = require('./models/userStats');
 const { ensureAuthenticated } = require('./config/authMiddleware');
 const Activity = require('./models/activities');
-const updateStats = require('./updateStatsFunction'); 
+const updateStats = require('./updateStatsFunction');
 
 require('dotenv').config();
 
@@ -115,6 +115,10 @@ app.use('/api/activities', ensureAuthenticated, async (req, res) => {
 app.get('/api/user/stats', ensureAuthenticated, async (req, res) => {
   try {
     const userId = req.user._id; // Get the user's ID from the authenticated user
+
+    // Update user statistics first
+    await updateStats(userId);
+
     const userStats = await UserStats.findOne({ userId }); // Filter statistics by userId
 
     if (!userStats) {

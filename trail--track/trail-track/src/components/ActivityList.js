@@ -53,7 +53,7 @@ function ActivityList() {
               <tr key={activity._id}>
                 <td>{activity.activityType}</td>
                 <td>{activity.location}</td>
-                <td>{activity.completionTime}</td>
+                <td>{activity.completionTime} minutes</td>
                 <td>{activity.distance}</td>
                 <td>{activity.accomplishment ? 'Yes' : 'No'}</td>
                 <td>

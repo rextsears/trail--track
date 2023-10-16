@@ -2,15 +2,6 @@ const mongoose = require('mongoose');
 const UserStats = require('./models/userStats');
 const Activity = require('./models/activities');
 
-const parseTimeString = function parseTimeString(timeString) {
-  console.log('Parsing time string:', timeString);
-  const [minutes, seconds] = timeString.split(':').map(Number);
-  console.log('Minutes:', minutes, 'Seconds:', seconds);
-  const milliseconds = Number(timeString.split('.')[1]);
-  console.log('Milliseconds:', milliseconds);
-  return milliseconds + seconds * 1000 + minutes * 60 * 1000;
-}
-
 const updateStats = async (userId) => {
   try {
     console.log('Updating user statistics for user:', userId);
@@ -24,21 +15,7 @@ const updateStats = async (userId) => {
           _id: null,
           adventures: { $sum: 1 },
           totalDistance: { $sum: { $toDouble: '$distance' } },
-          totalTime: {
-            $sum: {
-              $add: [
-                { $multiply: ['$time.hours', 60] }, // Convert hours to minutes
-                { $multiply: ['$time.minutes', 1] }, // Convert minutes to minutes
-                { $divide: ['$time.seconds', 60] }, // Convert seconds to minutes
-                { $divide: ['$time.milliseconds', 60000] }, // Convert milliseconds to minutes
-                { $reduce: { // Convert formattedTime to minutes using parseTimeString
-                  input: { $split: ['$formattedTime', '.'] },
-                  initialValue: 0,
-                  in: { $add: ['$$value', { $divide: [parseTimeString('$$this'), 60000] }] },
-                } },
-              ],
-            },
-          },
+          totalTime: { $sum: { $toDouble: '$completionTime' } }, // Summing completionTime directly
         },
       },
       {

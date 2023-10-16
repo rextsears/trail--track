@@ -39,7 +39,7 @@ function Accomplishments() {
               <tr key={accomplishment._id}>
                 <td>{accomplishment.activityType}</td>
                 <td>{accomplishment.location}</td>
-                <td>{accomplishment.completionTime}</td>
+                <td>{accomplishment.completionTime} minutes</td>
                 <td>{accomplishment.distance}</td>
               </tr>
             ))
