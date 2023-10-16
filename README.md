@@ -19,9 +19,11 @@
 
 - Activity information stored in a _MongoDB_ database via JS Express server API and served to React client.
 
-- User ability to mark certain Activities as 'Accomplishments.'
-
 - Activity database entries can be _viewed/added/edited/deleted_ only by the authenticated user.
+
+- Google Maps integration using React Google Maps API.
+
+- User ability to mark certain Activities as 'Accomplishments.'
 
 - User authentication utilizing Passport.
 
