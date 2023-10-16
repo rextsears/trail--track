@@ -30,3 +30,8 @@ h3 {
 header {
     padding: 10px 0;
 }
+#navlink {
+    padding-left: 15px;
+    padding-bottom: 15px;
+    font-size: 18px;
+  }

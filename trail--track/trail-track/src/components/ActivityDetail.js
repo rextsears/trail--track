@@ -104,8 +104,8 @@ function ActivityDetail() {
                         Cancel
                     </button>
                 )}
-                <Link to="/main">Return to Main</Link>
-                <Link to="/all-activities">Return to Activity List</Link>
+                <Link to="/main" id="navlink">Return to Main</Link>
+                <Link to="/all-activities" id="navlink">Return to Activity List</Link>
             </div>
             {showConfirmation && (
                 <div className="confirmation-modal">
@@ -118,11 +118,14 @@ function ActivityDetail() {
             {editing && (
                 <EditActivityForm activityData={activity} onSubmit={handleEditSubmit} />
             )}
-            {!editing && (
+                <div className="map-space">
+                </div>
                 <div className="map-container">
+                <section id="maptext">Map</section>
                     <TrackMap />
                 </div>
-            )}
+                <div className="map-space">
+                </div>
         </div>
     );
 }

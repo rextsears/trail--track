@@ -8,7 +8,6 @@ function TrackMap() {
   return (
     <LoadScript googleMapsApiKey="AIzaSyBIlG3Tc-8JSLTiWy8MLL8Gnipsa1PYfhc" libraries={libraries}>
       <GoogleMap
-        size={{ width: 500, height: 500 }}
         className="map"
         center={{
           lat: 35.3019,

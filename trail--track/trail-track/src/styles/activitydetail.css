@@ -11,13 +11,13 @@ h2 {
 }
 .map-container {
     display: flex;
-    width: 500px;
+    width: 100%;
     height: 500px;
     border: 5px solid black;
   }
-.map {
-  border: 5px solid yellow;
-} 
+.map-space {
+  height: 50px;
+  }
 .detail-container {
   display: flex;
   flex-direction: column;
@@ -38,4 +38,13 @@ section {
   padding-left: 20px;
   font-weight: bold;
   font-style: italic;
+}
+div {
+  width: 100%;
+}
+.map {
+  width: 800px;
+}
+#maptext {
+  font-size: 35px;
 }

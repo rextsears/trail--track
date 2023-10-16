@@ -68,7 +68,7 @@ function ActivityList() {
           )}
         </tbody>
       </table>
-      <Link to="/main">Return to Main</Link>
+      <Link to="/main" id="navlink">Return to Main</Link>
     </div>
   );
 }
