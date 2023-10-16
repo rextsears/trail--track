@@ -8,7 +8,7 @@
 ## Getting Started
 ###
 ###
-**Launch [Trail // Track here](https://xxx)!**
+**Launch Trail // Track [here](https://xxx)!**
 ###
 ###
 ## Features
