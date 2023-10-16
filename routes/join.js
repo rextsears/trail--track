@@ -16,7 +16,7 @@ router.post('/register', async (req, res) => {
 
     const newUser = new User({
       username,
-      password, // Store the plain text password (not recommended for production)
+      password,
       name,
       email,
     });

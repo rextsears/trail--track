@@ -33,7 +33,7 @@ export const register = (userData) => {
 // Function to get user details
 export const getUserDetails = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/api/user/details`);  // The specific endpoint might vary based on your server configuration
+    const response = await axios.get(`${BASE_URL}/api/user/details`);
       return response;
   } catch (error) {
       console.error("Failed to fetch user details:", error);
@@ -47,7 +47,7 @@ export const getUserStats = (authToken) => {
 
   return axios.get(API_STAT_ENDPOINT, {
     headers: {
-      Authorization: `Bearer ${authToken}`, // Include the token in the headers
+      Authorization: `Bearer ${authToken}`,
     },
   });
 };
@@ -55,15 +55,15 @@ export const getUserStats = (authToken) => {
 // Function to get a list of activities
 export async function getActivities(authToken) {
   try {
-    const API_ENDPOINT = 'http://localhost:5001/api/activities'; // Adjust the endpoint as needed
+    const API_ENDPOINT = 'http://localhost:5001/api/activities';
 
     const response = await axios.get(API_ENDPOINT, {
       headers: {
-        Authorization: `Bearer ${authToken}`, // Include the token in the headers
+        Authorization: `Bearer ${authToken}`,
       },
     });
 
-    return response.data; // Return the data directly, not the entire response
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -71,26 +71,21 @@ export async function getActivities(authToken) {
 
 // Function to fetch user's name
 export const fetchUserName = async () => {
-  // Fetch the user's name using the new route
   try {
     const response = await fetch('/api/user/name');
 
-    // Check the status code of the response
     if (response.status !== 200) {
       console.error('Failed to fetch user name:', response.statusText);
       return null;
     }
 
-    // Parse the JSON response
     const data = await response.json();
 
-    // Validate the JSON response
     if (!data.name) {
       console.error('Invalid server response');
       return null;
     }
 
-    // Return the user's name
     return data.name;
   } catch (error) {
     console.error('Failed to fetch user name:', error);

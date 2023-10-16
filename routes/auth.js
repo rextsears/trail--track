@@ -16,7 +16,6 @@ router.post('/api/login', (req, res, next) => {
       if (loginErr) {
         return res.status(500).json({ error: 'Login failed' });
       }
-      // Send a success response. Optionally, you can also send user data if needed.
       return res.status(200).json({ message: 'Login successful' });
     });
   })(req, res, next);

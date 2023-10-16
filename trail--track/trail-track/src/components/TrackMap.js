@@ -1,6 +1,6 @@
 import React from 'react';
 import { LoadScript, GoogleMap, Marker } from '@react-google-maps/api';
-import '../styles/map.css'; // Import the map.css file
+import '../styles/map.css';
 
 const libraries = ['places'];
 
@@ -11,8 +11,8 @@ function TrackMap() {
         size={{ width: 500, height: 500 }}
         className="map"
         center={{
-          lat: 35.3019, // U.S. National Whitewater Center latitude
-          lng: -80.9436, // U.S. National Whitewater Center longitude
+          lat: 35.3019,
+          lng: -80.9436,
         }}
         zoom={10}
       >

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const Activity = require('../models/activities'); // Import the Activity model
-const UserStats = require('../models/userStats'); // Import the UserStats model
-const { ensureAuthenticated } = require('../config/authMiddleware'); // Import the authentication middleware
+const Activity = require('../models/activities');
+const UserStats = require('../models/userStats');
+const { ensureAuthenticated } = require('../config/authMiddleware');
 
 // Handle adding a new activity
 router.post('/trackServer', ensureAuthenticated, async (req, res) => {

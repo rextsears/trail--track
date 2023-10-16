@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { register } from '../api/trackServer';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 
 function JoinScreen() {
   const [formData, setFormData] = useState({
@@ -11,7 +11,7 @@ function JoinScreen() {
     email: '',
   });
 
-  const navigate = useNavigate(); // Get the navigate function
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -32,8 +32,7 @@ function JoinScreen() {
       if (response.status === 201) {
         console.log('Registration successful');
 
-        // Redirect to the login screen after successful registration
-        navigate('/'); // Use the navigate function to navigate to the login screen
+        navigate('/');
       } else {
         console.error('Registration failed');
       }

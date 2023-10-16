@@ -2,12 +2,12 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginScreen from './components/LoginScreen';
 import MainScreen from './components/Main';
-import AddActivity from './components/AddActivity'; // Import the AddActivity component
+import AddActivity from './components/AddActivity';
 import EditActivityForm from './components/EditActivityForm';
 import JoinScreen from './components/JoinScreen';
 import ActivityList from './components/ActivityList';
 import Accomplishments from './components/Accomplishments';
-import ActivityDetail from './components/ActivityDetail'; // Import the ActivityDetail component
+import ActivityDetail from './components/ActivityDetail';
 import OnlyMap from './components/OnlyMap';
 
 

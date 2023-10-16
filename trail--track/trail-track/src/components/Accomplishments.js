@@ -9,8 +9,7 @@ function Accomplishments() {
     axios
       .get('http://localhost:5001/api/activities')
       .then((response) => {
-        console.log(response); // Log the response data
-        // Filter the data to get only accomplishments with "true"
+        console.log(response);
         const filteredAccomplishments = response.data.filter(
           (accomplishment) => accomplishment.accomplishment === true
         );
@@ -19,7 +18,7 @@ function Accomplishments() {
       .catch((error) => {
         console.error('Error fetching accomplishments:', error);
       });
-  }, []); // The empty dependency array ensures this effect runs once when the component mounts
+  }, []);
 
   return (
     <div>

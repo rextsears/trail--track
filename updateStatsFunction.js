@@ -15,7 +15,7 @@ const updateStats = async (userId) => {
           _id: null,
           adventures: { $sum: 1 },
           totalDistance: { $sum: { $toDouble: '$distance' } },
-          totalTime: { $sum: { $toDouble: '$completionTime' } }, // Summing completionTime directly
+          totalTime: { $sum: { $toDouble: '$completionTime' } },
         },
       },
       {

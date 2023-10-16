@@ -1,7 +1,6 @@
 import React from 'react';
-import TrackMap from './TrackMap'; // Import the TrackMap component
+import TrackMap from './TrackMap';
 import { Link } from 'react-router-dom';
-//import '../styles/map.css'; // Import the map.css file
 
 function OnlyMap() {
     return (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getUserStats, fetchUserName } from '../api/trackServer'; // Correct the import path
+import { getUserStats, fetchUserName } from '../api/trackServer';
 import '../styles/common.css';
 import '../styles/main.css';
 
@@ -10,9 +10,8 @@ function MainScreen() {
     totalDistance: 0,
     totalTime: 0,
   });
-  const [activeUserName, setActiveUserName] = useState(''); // State to hold the active user's name
+  const [activeUserName, setActiveUserName] = useState('');
 
-  // Define a function to fetch and update user stats
   const updateUserStats = async () => {
     try {
       const response = await getUserStats();
@@ -30,13 +29,11 @@ function MainScreen() {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Fetch user name when the component mounts
       const userName = await fetchUserName();
       if (userName !== null) {
         setActiveUserName(userName);
       }
 
-      // Fetch and update user stats
       updateUserStats();
     };
 
@@ -46,7 +43,7 @@ function MainScreen() {
   return (
     <div className="main-screen">
       <h1>Trail // Track</h1>
-      <h2>Welcome // {activeUserName}!</h2> {/* Display the greeting */}
+      <h2>Welcome // {activeUserName}!</h2>
       <div className="my-stats">
         <h2>My Stats</h2>
         <div className="stats-container">

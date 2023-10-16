@@ -9,13 +9,11 @@ h2 {
     margin: 10px 0;
     text-align: center;
 }
-
 h3 {
     font-size: 20px;
     margin: 10px 0;
     text-align: center;
 }
-
 header {
     padding: 10px 0;
 }
@@ -30,12 +28,10 @@ header {
 .dashboard-container {
     padding: 20px;
 }
-
 .dashboard-stats {
     display: flex;
     justify-content: space-between;
 }
-
 .stats-container {
     flex: 3;
     padding: 20px;
@@ -72,7 +68,6 @@ header {
     background-color: #fff; /* Grayish background to match wireframe */
     border: 3px solid black;
 }
-
 .stat {
     flex: 1; /* Distribute space evenly among stats */
     padding: 20px;
@@ -97,18 +92,15 @@ header {
     font-weight: bold;
     font-size: 22px;
 }
-
 .navigation li {
     margin-right: 20px; /* Space between navigation items */
 }
-
 .navigation a {
     text-decoration: none; /* Remove underline */
     color: white; /* Dark color for text */
     border-bottom: 2px solid transparent; /* Prepare for hover effect */
     transition: border-bottom 0.3s; /* Smooth transition */
 }
-
 .navigation a:hover {
     border-bottom: 2px solid white; /* Underline effect on hover */
 }

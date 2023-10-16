@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { useNavigate, Link } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/login.css';
 
@@ -18,7 +18,6 @@ function LoginScreen() {
     const { username, password } = loginFormData;
 
     try {
-      // Make an HTTP POST request to your server's authentication endpoint
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
@@ -66,7 +65,6 @@ function LoginScreen() {
         <button type="submit" class="loginbutton">Login</button>
       </form>
 
-      {/* Add a "Join" link to the registration screen */}
       <p id="join">
         New user? <Link to="/join">Join</Link>
       </p>
